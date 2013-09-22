@@ -3,6 +3,11 @@ require.config({
     { name: 'controllers' },
     { name: 'directives' },
   ],
+  shim: {
+    angular: {
+      deps: ['jquery']
+    }
+  },
   paths: {
     jquery: '../assets/jquery/jquery.min',
     angular: '../assets/angular/angular.min',
