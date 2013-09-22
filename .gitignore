@@ -1,0 +1,8 @@
+.DS_Store
+thumbs.db
+node_modules
+bower_components
+nbproject
+public/assets
+.idea
+*.log

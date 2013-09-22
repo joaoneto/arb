@@ -1,0 +1,27 @@
+{
+  "name": "arb",
+  "version": "0.0.1",
+  "authors": [
+    "João Neto <joaopintoneto@gmail.com>"
+  ],
+  "description": "AngularJS RequireJS Bootstrap",
+  "keywords": [
+    "angularjs",
+    "requirejs",
+    "bootstrap",
+    "boilerplate"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "public/assets"
+  ],
+  "dependencies": {
+    "jquery": "~2.0.3",
+    "requirejs": "~2.1.8",
+    "angular": "~1.0.8",
+    "bootstrap": "3.0.0"
+  }
+}
