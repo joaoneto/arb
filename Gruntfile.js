@@ -3,17 +3,17 @@ var mountFolder = function (connect, dir) {
   return connect.static(require('path').resolve(dir));
 };
 
-var bowerInstall = function () {
-  var exec = require('child_process').exec,
-      cb = this.async();
-  console.log('Install bower components');
-  exec('node_modules/.bin/bower install', { cwd: './' }, function (err, stdout, stderr) {
-    console.log('Done.');
-    cb();
-  });
-};
-
 module.exports = function (grunt) {
+  var bowerInstall = function () {
+    var exec = require('child_process').exec,
+        cb = this.async();
+    grunt.log.writeln('Install bower components');
+    exec('node_modules/.bin/bower install', { cwd: './' }, function (err, stdout, stderr) {
+      grunt.log.writeln('Done.');
+      cb();
+    });
+  };
+
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-connect');
