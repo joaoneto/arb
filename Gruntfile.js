@@ -48,8 +48,14 @@ module.exports = function (grunt) {
         files: [
           { expand: true,
             cwd: 'bower_components',
-            src: ['jquery/jquery*.{js,map}', 'angular/*.js', 'requirejs/require.js'],
+            src: [
+              'jquery/jquery*.{js,map}',
+              'angular/*.js',
+              'requirejs/require.js',
+              'respond/*.js',
+            ],
             dest: 'public/assets' },
+          { expand: true, cwd: 'bower_components/html5shiv/dist', src: ['**'], dest: 'public/assets/html5shiv' },
           { expand: true, cwd: 'bower_components/bootstrap/dist', src: ['**'], dest: 'public/assets/bootstrap' },
         ]
       }
