@@ -11,16 +11,17 @@ define('ngRequirePackage', ['angular'], function () {
   }
 
   ngRequirePackage.load = function load(modules) {
-    var deps = [];
+    var deps = [], i = 0, len = modules.length, module;
 
-    angular.forEach(modules, function (module) {
+    for (; i < len; i++) {
+      module = modules[i];
       if (module instanceof ngRequirePackage) {
         angular
           .module(module.name, module.dependencies || [])
           [module.type](module.name.split('.').pop(), module.object)
         deps.push(module.name);
       }
-    });
+    }
 
     return deps;
   }
