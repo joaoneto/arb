@@ -1,3 +1,7 @@
+var config = {
+  src_path: 'src',
+  components_path: '<%= config.src_path %>/components'
+};
 var lrSnippet = require('grunt-contrib-livereload/lib/utils').livereloadSnippet;
 var mountFolder = function (connect, dir) {
   return connect.static(require('path').resolve(dir));
@@ -22,9 +26,11 @@ module.exports = function (grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
 
+    config: config,
+
     watch: {
       livereload: {
-        files: ['public/**/*'],
+        files: ['<%= config.src_path %>/**/*'],
         options: { livereload: true }
       },
     },
@@ -35,13 +41,13 @@ module.exports = function (grunt) {
           port: 9000,
           hostname: '0.0.0.0',
           middleware: function (connect) {
-            return [lrSnippet, mountFolder(connect, 'public')];
+            return [lrSnippet, mountFolder(connect, config.src_path)];
           }
         }
       },
     },
 
-    clean: { install: { src: ['public/assets'] } },
+    clean: { install: { src: ['<%= config.components_path %>'] } },
 
     copy: {
       install: {
@@ -54,9 +60,9 @@ module.exports = function (grunt) {
               'requirejs/require.js',
               'respond/*.js',
             ],
-            dest: 'public/assets' },
-          { expand: true, cwd: 'bower_components/html5shiv/dist', src: ['**'], dest: 'public/assets/html5shiv' },
-          { expand: true, cwd: 'bower_components/bootstrap/dist', src: ['**'], dest: 'public/assets/bootstrap' },
+            dest: '<%= config.components_path %>' },
+          { expand: true, cwd: 'bower_components/html5shiv/dist', src: ['**'], dest: '<%= config.components_path %>/html5shiv' },
+          { expand: true, cwd: 'bower_components/bootstrap/dist', src: ['**'], dest: '<%= config.components_path %>/bootstrap' },
         ]
       }
     },
