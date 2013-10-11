@@ -12,6 +12,7 @@ require.config({
   paths: {
     jquery: '../../components/jquery/jquery',
     angular: '../../components/angular/angular',
+    ngBootstrap: '../../components/angular-bootstrap/ui-bootstrap-tpls.min',
   },
 
   // Dependencies orders
@@ -23,6 +24,9 @@ require.config({
       exports: 'angular',
       deps: ['jquery']
     },
+    ngBootstrap: {
+      deps: ['angular']
+    }
   }
 })
 

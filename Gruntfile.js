@@ -56,7 +56,7 @@ module.exports = function (grunt) {
             cwd: 'bower_components',
             src: [
               'jquery/jquery*.{js,map}',
-              'angular/*.js',
+              'angular*/*.js',
               'requirejs/require.js',
               'respond/*.js',
             ],
