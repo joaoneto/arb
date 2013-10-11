@@ -2,12 +2,12 @@ define([
   'angular',
   'directives',
   'controllers/AppCtrl',
-  'controllers/UsersCtrl',
+  'controllers/NavbarCtrl',
 ], function () {
   return angular
     .module('arb.controllers', [
       'arb.directives',
       'arb.controllers.AppCtrl',
-      'arb.controllers.UsersCtrl'
+      'arb.controllers.NavbarCtrl'
     ]);
 });
