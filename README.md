@@ -1,21 +1,26 @@
 arb
 ===
 
-Boilerplate to [AngularJS](https://github.com/angular/angular.js),
-[RequireJS](https://github.com/jrburke/requirejs)
-and [Twitter Bootstrap](https://github.com/twbs/bootstrap/).
+**arb** is a lightwheight boilerplate to [AngularJS](http://angularjs.org),
+[RequireJS](http://requirejs.org)
+and [Twitter Bootstrap](http://getbootstrap.com).
+
+The purpose of this boilerplate is to bring the power of AngularJS to extend
+HTML vocabulary, ease in loading modules via
+[AMD](https://github.com/amdjs/amdjs-api/wiki/AMD) RequireJS and agility to
+create layout of Twitter Bootstrap.
 
 ### Env requirements
 
-- Node.js / npm
-- bower
-- grunt
+- [Node.js](http://nodejs.org) / [npm](http://npmjs.org)
+- [bower](http://bower.io)
+- [Grunt](http://gruntjs.com)
 
 ### Instalation
 
 ```shell
-    git clone git://github.com/joaoneto/arb.git
-    cd arb && npm install
+git clone git://github.com/joaoneto/arb.git
+cd arb && npm install
 ```
 
 The `npm install`, install the dependencies contained in the `packades.json`.
@@ -26,7 +31,7 @@ only copies the necessary files to the folder `public/assets`.
 ### Init server
 
 ```shell
-    $ npm start
+$ npm start
 ```
 
 ### License
