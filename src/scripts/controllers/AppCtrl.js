@@ -1,6 +1,4 @@
 define(['angular'], function (angular) {
-  console.log('aqui')
-
   return angular
     .module('arb.controllers.AppCtrl', [])
 
@@ -9,15 +7,13 @@ define(['angular'], function (angular) {
       $state.go('test');
     }])
 
-    .config(['$routeProvider', function ($routeProvider) {
+    .config(['$routeProvider', '$stateProvider', function ($routeProvider, $stateProvider) {
       $routeProvider
         .when('/', {
           controller: 'AppCtrl',
           templateUrl: 'partials/default.html'
         });
-    }])
 
-    .config(function ($stateProvider){
       $stateProvider.state('test', {
         views: {
           '': {
@@ -25,6 +21,6 @@ define(['angular'], function (angular) {
           }
         }
       });
-    })
+    }])
 
 });

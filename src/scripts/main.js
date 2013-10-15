@@ -12,6 +12,7 @@ require.config({
   paths: {
     jquery: '../../components/jquery/jquery',
     angular: '../../components/angular/angular',
+    ngMockE2E: '../../components/angular-mocks/angular-mocks',
     ngBootstrap: '../../components/angular-bootstrap/ui-bootstrap-tpls.min',
     ngUiRouter: '../../components/angular-ui-router/angular-ui-router.min',
   },
@@ -25,12 +26,9 @@ require.config({
       exports: 'angular',
       deps: ['jquery']
     },
-    ngBootstrap: {
-      deps: ['angular']
-    },
-    ngUiRouter: {
-      deps: ['angular']
-    }
+    ngBootstrap: ['angular'],
+    ngUiRouter: ['angular'],
+    ngMockE2E: ['angular']
   }
 })
 

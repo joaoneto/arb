@@ -2,7 +2,7 @@ define(['angular'], function (angular) {
   return angular
     .module('arb.controllers.NavbarCtrl', [])
 
-    .controller('NavbarCtrl', ['$scope', 'Config', function ($scope, Config) {
-      $scope.appName = Config.appName;
+    .controller('NavbarCtrl', ['$scope', 'conf', function ($scope, conf) {
+      $scope.appName = conf.get('appName');
     }])
 });
