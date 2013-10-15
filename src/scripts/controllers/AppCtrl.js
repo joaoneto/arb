@@ -1,9 +1,12 @@
 define(['angular'], function (angular) {
+  console.log('aqui')
+
   return angular
     .module('arb.controllers.AppCtrl', [])
 
-    .controller('AppCtrl', ['$scope', function ($scope) {
+    .controller('AppCtrl', ['$scope', '$state', function ($scope, $state) {
       $scope.name = 'I am AppCtrl';
+      $state.go('test');
     }])
 
     .config(['$routeProvider', function ($routeProvider) {
@@ -13,4 +16,15 @@ define(['angular'], function (angular) {
           templateUrl: 'partials/default.html'
         });
     }])
+
+    .config(function ($stateProvider){
+      $stateProvider.state('test', {
+        views: {
+          '': {
+            template: '<p>State test</p>'
+          }
+        }
+      });
+    })
+
 });

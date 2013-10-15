@@ -57,10 +57,12 @@ module.exports = function (grunt) {
             src: [
               'jquery/jquery*.{js,map}',
               'angular*/*.js',
+              '!angular-ui-router/**',
               'requirejs/require.js',
               'respond/*.js',
             ],
             dest: '<%= config.components_path %>' },
+          { expand: true, cwd: 'bower_components/angular-ui-router/release', src: ['*.js'], dest: '<%= config.components_path %>/angular-ui-router' },
           { expand: true, cwd: 'bower_components/html5shiv/dist', src: ['**'], dest: '<%= config.components_path %>/html5shiv' },
           { expand: true, cwd: 'bower_components/bootstrap/dist', src: ['**'], dest: '<%= config.components_path %>/bootstrap' },
         ]
