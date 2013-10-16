@@ -11,11 +11,15 @@ define([
     .module('arb', ['arb.lib.conf', 'arb.lib.apiMocks', 'arb.services', 'arb.controllers', 'ui.bootstrap'])
 
     /*
+    // not working to set defaults withCredentials
+    .config(['$httpProvider', function ($httpProvider) {
+      $httpProvider.defaults.withCredentials = true;
+    }])
+
     // Uncomment this block, to configure your own
     .config(['confProvider', function (confProvider) {
       confProvider.set('appName', 'My app name');
-      confProvider.set('baseUrl', 'http://api.myserver.com/');
-      confProvider.set('apiVersion', 'v1');
+      confProvider.set('baseUrl', 'http://localhost:3000');
     }]);
     */
 

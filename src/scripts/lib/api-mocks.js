@@ -4,19 +4,24 @@ define(['angular', 'lib/conf-provider', 'ngMockE2E'], function () {
       var baseUrl = conf.get('baseUrl');
       var authorized = false;
 
-      $httpBackend.when('GET', baseUrl + 'v1/sessions').respond(function (method, url, data) {
-        authorized = true;
+      $httpBackend.when('GET', baseUrl + '/session').respond(function (method, url, data) {
         if (authorized) {
-          return [200, [{ id: '1234567890', username: 'Test User' }]];
+          return [200, { id: '1234567890', username: 'user' }];
+        } else {
+          return [403, { error: 'You are not logged in.' }];
         }
       });
 
-      $httpBackend.when('POST', baseUrl + 'v1/sessions').respond(function (method, url, data) {
-        authorized = true;
-        return [200];
+      $httpBackend.when('POST', baseUrl + '/session').respond(function (method, url, data) {
+        if (authorized) {
+          return [403, { error: 'You are already logged in.' }];
+        } else {
+          authorized = true;
+          return [200, { success: true }];
+        }
       });
 
-      $httpBackend.when('DELETE', baseUrl + 'v1/sessions').respond(function (method, url, data) {
+      $httpBackend.when('DELETE', baseUrl + '/session').respond(function (method, url, data) {
         authorized = false;
         return [200];
       });
