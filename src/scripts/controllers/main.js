@@ -3,6 +3,7 @@ define([
   'directives',
   'ngUiRouter',
   'controllers/AppCtrl',
+  'controllers/LoginCtrl',
   'controllers/NavbarCtrl',
 ], function () {
   return angular
@@ -10,6 +11,7 @@ define([
       'ui.router',
       'arb.directives',
       'arb.controllers.AppCtrl',
+      'arb.controllers.LoginCtrl',
       'arb.controllers.NavbarCtrl'
     ]);
 });

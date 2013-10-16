@@ -2,7 +2,8 @@ define(['angular'], function () {
   return angular.module('arb.lib.conf', [])
     .provider('conf', [function () {
       this.conf = {
-        appName: 'arb'
+        appName: 'arb',
+        baseUrl: 'http://api.myserver.com/'
       };
 
       this.$get = function () {
@@ -10,6 +11,9 @@ define(['angular'], function () {
         return {
           get: function (key) {
             return conf[key];
+          },
+          getAll: function () {
+            return conf;
           }
         };
       };

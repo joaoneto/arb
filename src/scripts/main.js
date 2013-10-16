@@ -6,6 +6,7 @@ require.config({
   packages: [
     { name: 'controllers' },
     { name: 'directives' },
+    { name: 'services' },
   ],
 
   // Component paths
@@ -13,6 +14,7 @@ require.config({
     jquery: '../../components/jquery/jquery',
     angular: '../../components/angular/angular',
     ngMockE2E: '../../components/angular-mocks/angular-mocks',
+    ngResource: '../../components/angular-resource/angular-resource.min',
     ngBootstrap: '../../components/angular-bootstrap/ui-bootstrap-tpls.min',
     ngUiRouter: '../../components/angular-ui-router/angular-ui-router.min',
   },
@@ -26,9 +28,10 @@ require.config({
       exports: 'angular',
       deps: ['jquery']
     },
+    ngMockE2E: ['angular'],
+    ngResource: ['angular'],
     ngBootstrap: ['angular'],
-    ngUiRouter: ['angular'],
-    ngMockE2E: ['angular']
+    ngUiRouter: ['angular']
   }
 })
 
