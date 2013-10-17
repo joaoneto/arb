@@ -7,7 +7,7 @@ define([
       var uri = conf.get('baseUrl') + '/session';
 
       function Auth() {
-        this.user = {};
+        this.user = null;
       }
 
       Auth.prototype.currentUser = function () {
@@ -38,7 +38,7 @@ define([
 
       Auth.prototype.logout = function (data) {
         // sessionStorage.unset('authenticated');
-        this.user = {};
+        this.user = null;
         return $http.delete(uri, { withCredentials: true });
       };
 
