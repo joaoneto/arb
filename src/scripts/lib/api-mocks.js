@@ -1,9 +1,10 @@
-define(['angular', 'lib/conf-provider', 'ngMockE2E'], function () {
-  return angular.module('arb.lib.apiMocks', ['arb.lib.conf', 'ngMockE2E'])
-    .run(['$httpBackend', '$log', '$timeout', 'conf', function ($httpBackend, $log, $timeout, conf) {
+define(['angular', 'lib/conf-provider', 'lib/session-storage', 'ngMockE2E'], function () {
+  return angular.module('arb.lib.apiMocks', ['arb.lib.conf', 'arb.lib.sessionStorage', 'ngMockE2E'])
+    .run(['$httpBackend', '$log', '$timeout', 'conf', 'sessionStorage', function ($httpBackend, $log, $timeout, conf, sessionStorage) {
       var baseUrl = conf.get('baseUrl');
-      var authorized = false;
+      var authorized = sessionStorage.get('authenticated');
       var userData = { id: '1234567890', username: 'user' };
+
 
       $httpBackend.when('GET', baseUrl + '/session').respond(function (method, url, data) {
         $log.info(method, baseUrl + '/session');

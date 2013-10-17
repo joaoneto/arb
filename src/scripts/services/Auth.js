@@ -1,26 +1,38 @@
 define([
   'angular',
-  // 'lib/session-storage'
+  'lib/session-storage'
 ], function (angular) {
-  return angular.module('arb.services.Auth', [/*'arb.lib.sessionStorage'*/])
-    .factory('Auth', ['$http', '$q', 'conf'/*, 'sessionStorage'*/, function ($http, $q, conf, sessionStorage) {
+  return angular.module('arb.services.Auth', ['arb.lib.sessionStorage'])
+    .factory('Auth', ['$http', '$q', 'conf', 'sessionStorage', function ($http, $q, conf, sessionStorage) {
       var uri = conf.get('baseUrl') + '/session';
 
       function Auth() {
         this.user = null;
       }
 
+      Auth._destroy = function () {
+        this.user = null;
+        sessionStorage.unset('authenticated');
+      };
+
       Auth.prototype.currentUser = function () {
         var self = this;
+        var defered = $q.defer();
 
-        if (self.isLoggedIn()) {
-          return $q.when(self.user);
+        if (!self.user && self.isLoggedIn()) {
+          self.user = $http.get(uri, { withCredentials: true })
+            .then(function (res) {
+              self.user = res.data;
+              defered.resolve(res.data);
+            }, function (err) {
+              Auth._destroy();
+              defered.reject(err);
+            });
         } else {
-          return $http.get(uri, { withCredentials: true }).then(function (res) {
-            self.user = response.data;
-            return self.user;
-          });
+          defered.resolve(self.user);
         }
+
+        return defered.promise;
       };
 
       Auth.prototype.login = function (data) {
@@ -28,23 +40,23 @@ define([
         var req = $http.post(uri, data, { withCredentials: true });
 
         req.then(function (res) {
-          // sessionStorage.set('authenticated', true);
+          sessionStorage.set('authenticated', true);
           self.user = res.data;
-        }, function () {
-          // sessionStorage.unset('authenticated');
+        }, function (err) {
+          Auth._destroy();
         });
+
         return req;
       };
 
       Auth.prototype.logout = function (data) {
-        // sessionStorage.unset('authenticated');
-        this.user = null;
+        Auth._destroy();
+
         return $http.delete(uri, { withCredentials: true });
       };
 
       Auth.prototype.isLoggedIn = function () {
-        // return sessionStorage.get('authenticated');
-        return !!this.user;
+        return sessionStorage.get('authenticated');
       };
 
       return new Auth;

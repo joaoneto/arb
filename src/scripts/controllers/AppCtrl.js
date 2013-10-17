@@ -9,7 +9,7 @@ define(['angular'], function (angular) {
 
   AppCtrl.resolve = {
     currentUser: ['Auth', function (Auth) {
-      return Auth.user;
+      return Auth.currentUser();
     }]
   };
 
