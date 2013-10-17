@@ -2,17 +2,17 @@ define(['angular'], function (angular) {
   return angular
     .module('arb.services.Page', [])
 
-    .factory('Page', function () {
-      var title = 'ARB';
+    .factory('Page', ['$rootScope', function ($rootScope) {
+      $rootScope.title = 'ARB';
 
       return {
-        title: function () {
-          return title;
+        getTitle: function () {
+          return $rootScope.title;
         },
         setTitle: function (newTitle) {
-          title = newTitle;
+          $rootScope.title = newTitle;
         }
       };
-    })
+    }])
 
 });

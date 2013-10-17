@@ -1,8 +1,7 @@
 define(['angular'], function (angular) {
-  function AppCtrl($scope, $state, Page, currentUser) {
+  function AppCtrl($scope, $rootScope, $state, Page, currentUser) {
     console.log('AppCtrl called');
     Page.setTitle('Home');
-    $scope.Page = Page;
     $scope.name = 'I am AppCtrl';
     $scope.currentUser = currentUser;
   }
@@ -15,7 +14,7 @@ define(['angular'], function (angular) {
 
   return angular
     .module('arb.controllers.AppCtrl', [])
-    .controller('AppCtrl', ['$scope', '$state', 'Page', 'currentUser', AppCtrl])
+    .controller('AppCtrl', ['$scope', '$rootScope', '$state', 'Page', 'currentUser', AppCtrl])
     .config(['$routeProvider', function ($routeProvider) {
       $routeProvider
         .when('/', {
