@@ -10,12 +10,13 @@ define([
   angular
     .module('arb', ['arb.lib.conf', 'arb.lib.apiMocks', 'arb.services', 'arb.controllers', 'ui.bootstrap'])
 
-    /*
-    // not working to set defaults withCredentials
     .config(['$httpProvider', function ($httpProvider) {
+      $httpProvider.defaults.useXDomain = true;
       $httpProvider.defaults.withCredentials = true;
+      delete $httpProvider.defaults.headers.common['X-Requested-With'];
     }])
 
+    /*
     // Uncomment this block, to configure your own
     .config(['confProvider', function (confProvider) {
       confProvider.set('appName', 'My app name');

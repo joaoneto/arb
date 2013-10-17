@@ -12,6 +12,7 @@ define(['angular'], function (angular) {
       $scope.login = function (success, error) {
         Auth.login($scope.data).then(function (data) {
           console.info('Logged in!');
+          $location.path('/');
         }, function (resp) {
           console.error('Crap, login error!');
         });

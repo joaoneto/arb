@@ -3,7 +3,7 @@ define(['angular'], function () {
     .provider('conf', [function () {
       this.conf = {
         appName: 'arb',
-        baseUrl: 'http://api.myserver.com/'
+        baseUrl: 'http://api.myserver.com'
       };
 
       this.$get = function () {

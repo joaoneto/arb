@@ -3,6 +3,8 @@ define(['angular'], function (angular) {
     .module('arb.controllers.NavbarCtrl', [])
 
     .controller('NavbarCtrl', ['$scope', 'conf', 'Auth', function ($scope, conf, Auth) {
+      console.log('NavbarCtrl called');
       $scope.appName = conf.get('appName');
+      $scope.currentUser = Auth.currentUser();
     }])
 });

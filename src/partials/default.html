@@ -1,5 +1,6 @@
 <ng-include src="'partials/templates/navbar.html'"></ng-include>
 <div class="container">
+  {{currentUser || 'undefined' | json}}
   <h1>{{name}}</h1>
   <div ui-view></div>
 </div>

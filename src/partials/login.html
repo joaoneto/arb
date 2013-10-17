@@ -1,5 +1,6 @@
 <ng-include src="'partials/templates/navbar.html'"></ng-include>
 <div class="container">
+  {{currentUser || 'undefined' | json}}
   <form class="form-signin" name="signin">
     <h2 class="form-signin-heading">Please sign in</h2>
     <input type="text" ng-model="data.username" class="form-control" placeholder="Username / Email" autofocus>
