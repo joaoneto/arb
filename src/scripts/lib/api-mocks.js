@@ -3,7 +3,7 @@ define(['angular', 'lib/conf-provider', 'lib/session-storage', 'ngMockE2E'], fun
     .run(['$httpBackend', '$log', '$timeout', 'conf', 'sessionStorage', function ($httpBackend, $log, $timeout, conf, sessionStorage) {
       var baseUrl = conf.get('baseUrl');
       var authorized = sessionStorage.get('authenticated');
-      var userData = { id: '1234567890', username: 'user' };
+      var userData = { id: '1234567890', username: 'user', role: ['moderator'] };
 
 
       $httpBackend.when('GET', baseUrl + '/session').respond(function (method, url, data) {

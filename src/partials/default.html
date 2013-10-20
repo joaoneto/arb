@@ -1,5 +1,8 @@
 <ng-include src="'partials/templates/navbar.html'"></ng-include>
 <div class="container">
   <h1>{{name}}</h1>
+
+  <pre>{{Notifications|json}}</pre>
+
   <div ui-view></div>
 </div>

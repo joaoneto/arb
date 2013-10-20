@@ -2,13 +2,18 @@ define(['angular'], function (angular) {
   return angular
     .module('arb.controllers.AppCtrl', [])
 
-    .controller('AppCtrl', ['$scope', '$rootScope', '$state', 'Page', 'Auth', 'currentUser',
-      function ($scope, $rootScope, $state, Page, Auth, currentUser) {
+    .controller('AppCtrl', ['$scope', '$rootScope', '$state', 'Page', 'Auth', 'Notifications',
+      function ($scope, $rootScope, $state, Page, Auth, Notifications) {
         console.log('AppCtrl called');
-        Page.setTitle('Home');
+        Page.set('title', 'Home');
         $scope.name = 'I am AppCtrl';
-        $rootScope.Auth = Auth;
-        $rootScope.currentUser = currentUser;
+
+        // setInterval(function () {
+        //   Page.set('title', new Date().getTime())
+        //   Notifications.remove('bla', 0);
+        //   Notifications.add('bla', { test: new Date().getTime() });
+        //   $scope.$apply()
+        // }, 1000);
       }
     ])
 

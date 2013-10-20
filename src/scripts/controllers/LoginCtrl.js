@@ -3,13 +3,11 @@ define(['angular'], function (angular) {
     .module('arb.controllers.LoginCtrl', [])
 
     .controller('LoginCtrl', ['$scope', '$location', 'Page', 'Auth',
-      function ($scope, $location, Page, Auth, currentUser) {
-        Page.setTitle('Login');
+      function ($scope, $location, Page, Auth) {
+        console.log('LoginCtrl called');
+        Page.set('title', 'Login');
 
         $scope.data = {};
-        $scope.currentUser = currentUser;
-
-        console.log('isLoggedIn', Auth.isLoggedIn())
 
         $scope.login = function (success, error) {
           Auth.login($scope.data).then(function (data) {
@@ -22,11 +20,12 @@ define(['angular'], function (angular) {
       }
     ])
 
-    .config(['$routeProvider', function ($routeProvider) {
+    .config(['$routeProvider', 'resolverProvider', function ($routeProvider, resolverProvider) {
       $routeProvider
         .when('/login', {
           controller: 'LoginCtrl',
-          templateUrl: 'partials/login.html'
+          templateUrl: 'partials/login.html',
+          resolve: resolverProvider.get(['currentUser'])
         })
         .when('/logout', {
           controller: ['$location', 'Auth', function ($location, Auth) {
