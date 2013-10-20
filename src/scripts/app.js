@@ -2,13 +2,14 @@
 define([
   'angular',
   'lib/conf-provider',
+  'lib/resolver-provider',
   'lib/api-mocks',
   'services',
   'controllers',
   'ngBootstrap'
 ], function () {
   angular
-    .module('arb', ['arb.lib.conf', 'arb.lib.apiMocks', 'arb.services', 'arb.controllers', 'ui.bootstrap'])
+    .module('arb', ['arb.lib.conf', 'arb.lib.resolver', 'arb.lib.apiMocks', 'arb.services', 'arb.controllers', 'ui.bootstrap'])
 
     .config(['$httpProvider', function ($httpProvider) {
       $httpProvider.defaults.useXDomain = true;

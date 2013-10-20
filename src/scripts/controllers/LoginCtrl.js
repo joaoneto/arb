@@ -2,22 +2,25 @@ define(['angular'], function (angular) {
   return angular
     .module('arb.controllers.LoginCtrl', [])
 
-    .controller('LoginCtrl', ['$scope', '$location', 'Page', 'Auth', function ($scope, $location, Page, Auth) {
-      Page.setTitle('Login');
+    .controller('LoginCtrl', ['$scope', '$location', 'Page', 'Auth',
+      function ($scope, $location, Page, Auth, currentUser) {
+        Page.setTitle('Login');
 
-      $scope.data = {};
+        $scope.data = {};
+        $scope.currentUser = currentUser;
 
-      console.log(Auth.isLoggedIn())
+        console.log('isLoggedIn', Auth.isLoggedIn())
 
-      $scope.login = function (success, error) {
-        Auth.login($scope.data).then(function (data) {
-          console.info('Logged in!');
-          $location.path('/');
-        }, function (resp) {
-          console.error('Crap, login error!');
-        });
-      };
-    }])
+        $scope.login = function (success, error) {
+          Auth.login($scope.data).then(function (data) {
+            console.info('Logged in!');
+            $location.path('/');
+          }, function (resp) {
+            console.error('Crap, login error!');
+          });
+        };
+      }
+    ])
 
     .config(['$routeProvider', function ($routeProvider) {
       $routeProvider

@@ -10,7 +10,7 @@ define([
         this.user = null;
       }
 
-      Auth._destroy = function () {
+      Auth.prototype._destroy = function () {
         this.user = null;
         sessionStorage.unset('authenticated');
       };
@@ -25,7 +25,7 @@ define([
               self.user = res.data;
               defered.resolve(res.data);
             }, function (err) {
-              Auth._destroy();
+              self._destroy();
               defered.reject(err);
             });
         } else {
@@ -43,14 +43,14 @@ define([
           sessionStorage.set('authenticated', true);
           self.user = res.data;
         }, function (err) {
-          Auth._destroy();
+          self._destroy();
         });
 
         return req;
       };
 
       Auth.prototype.logout = function (data) {
-        Auth._destroy();
+        this._destroy();
 
         return $http.delete(uri, { withCredentials: true });
       };
