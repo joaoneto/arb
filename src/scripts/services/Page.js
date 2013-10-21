@@ -2,9 +2,10 @@ define(['angular'], function (angular) {
   return angular
     .module('arb.services.Page', [])
 
-    .factory('Page', ['$rootScope', 'Auth', function ($rootScope, Auth) {
+    .factory('Page', ['$rootScope', 'conf', 'Auth', function ($rootScope, conf, Auth) {
       $rootScope.page = {
         title: 'ARB',
+        appName: conf.get('appName'),
         currentUser: Auth.currentUser()
       };
 
