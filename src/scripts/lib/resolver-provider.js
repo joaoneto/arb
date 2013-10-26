@@ -13,7 +13,7 @@ define(['angular'], function () {
         }
       }
 
-      this.set = function (key, value) {
+      this.add = function (key, value) {
         if ('string' === typeof key) {
           this.resolvers[key] = value;
         } else {

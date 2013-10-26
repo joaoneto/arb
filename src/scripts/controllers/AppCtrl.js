@@ -19,7 +19,7 @@ define(['angular'], function (angular) {
 
     .config(['$routeProvider', 'resolverProvider', function ($routeProvider, resolverProvider) {
       resolverProvider
-        .set({
+        .add({
           currentUser: ['Auth', function (Auth) {
             return Auth.currentUser();
           }]

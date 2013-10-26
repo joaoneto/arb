@@ -9,12 +9,20 @@ define(['angular'], function (angular) {
         currentUser: Auth.currentUser()
       };
 
+      $rootScope.$on('auth.currentuser', function (event, message) {
+        $rootScope.page.currentUser = message;
+      });
+
+      $rootScope.$on('auth.authenticated', function (event, message) {
+        $rootScope.page.currentUser = message;
+      });
+
       return {
         get: function (key) {
           return $rootScope.page[key];
         },
-        set: function (key, newTitle) {
-          $rootScope.page[key] = newTitle;
+        set: function (key, val) {
+          $rootScope.page[key] = val;
         }
       };
     }])

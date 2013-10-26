@@ -5,8 +5,8 @@ define([
   return angular
     .module('arb.services.Auth', ['arb.lib.sessionStorage'])
 
-    .factory('Auth', ['$http', '$q', 'conf', 'sessionStorage',
-      function ($http, $q, conf, sessionStorage) {
+    .factory('Auth', ['$rootScope', '$http', '$q', 'conf', 'sessionStorage',
+      function ($rootScope, $http, $q, conf, sessionStorage) {
         var uri = conf.get('baseUrl') + '/session';
 
         function Auth() {
@@ -25,10 +25,13 @@ define([
           if (!self.user && self.isLoggedIn()) {
             self.user = $http.get(uri, { withCredentials: true })
               .then(function (res) {
-                self.user = res.data;
-                defered.resolve(res.data);
+                var user = res.data;
+                self.user = user;
+                $rootScope.$broadcast('auth.currentuser', user);
+                defered.resolve(user);
               }, function (err) {
                 self._destroy();
+                $rootScope.$broadcast('auth.error', err);
                 defered.reject(err);
               });
           } else {
@@ -43,9 +46,12 @@ define([
           var req = $http.post(uri, data, { withCredentials: true });
 
           req.then(function (res) {
+            var user = res.data;
             sessionStorage.set('authenticated', true);
-            self.user = res.data;
+            $rootScope.$broadcast('auth.authenticated', user);
+            self.user = user;
           }, function (err) {
+            $rootScope.$broadcast('auth.error', err);
             self._destroy();
           });
 
