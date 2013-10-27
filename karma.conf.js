@@ -9,18 +9,8 @@ module.exports = function (config) {
     exclude: [
       'src/scripts/main.js'
     ],
-    plugins: [
-      'karma-jasmine',
-      'karma-requirejs',
-      'karma-html2js-preprocessor',
-      'karma-spec-reporter',
-      'karma-chrome-launcher',
-      'karma-firefox-launcher',
-      'karma-phantomjs-launcher'
-    ],
     frameworks: ['jasmine', 'requirejs'],
-    browsers: ['ChromeCanary'],
-    // browsers: ['PhantomJS'],
+    browsers: ['PhantomJS'],
     reporters: ['progress'],
     captureTimeout: 60000,
     autoWatch: true,

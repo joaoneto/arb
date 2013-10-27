@@ -1,8 +1,9 @@
 var env = process.env.CI ? 'continuous' : 'unit';
 
 var config = {
-  src_path: 'src',
-  components_path: '<%= config.src_path %>/components'
+  src_path: './src',
+  components_path: '<%= config.src_path %>/components',
+  coverage_path:  './coverage',
 };
 
 var lrSnippet = require('grunt-contrib-livereload/lib/utils').livereloadSnippet;
@@ -38,11 +39,24 @@ module.exports = function (grunt) {
         configFile: 'karma.conf.js'
       },
       unit: {
+        browsers: ['ChromeCanary']
       },
       continuous: {
         autoWatch: false,
         singleRun: true
-      }
+      },
+      coverage: {
+        autoWatch: false,
+        singleRun: true,
+        reporters: ['progress', 'coverage'],
+        preprocessors: {
+          'src/scripts/**/*.js': ['coverage']
+        },
+        coverageReporter: {
+          type: 'html',
+          dir: 'coverage/'
+        }
+      },
     },
 
     watch: {
@@ -62,9 +76,24 @@ module.exports = function (grunt) {
           }
         }
       },
+      coverage: {
+        options: {
+          port: 5555,
+          // hostname: '0.0.0.0',
+          keepalive: true,
+          open: true,
+          middleware: function (connect) {
+            var dir = grunt.file.glob.sync(require('path').resolve(config.coverage_path + '/PhantomJS*'))[0];
+            return [lrSnippet, mountFolder(connect, dir)];
+          }
+        }
+      },
     },
 
-    clean: { install: { src: ['<%= config.components_path %>'] } },
+    clean: {
+      install: { src: ['<%= config.components_path %>'] },
+      coverage: { src: ['<%= config.coverage_path %>'] },
+    },
 
     copy: {
       install: {
@@ -87,9 +116,14 @@ module.exports = function (grunt) {
     },
   });
 
-  grunt.registerTask('test', 'run tests', ['bower_install', 'karma:' + env]);
+
   grunt.registerTask('bower_install', 'install bower components', bowerInstall);
-  grunt.registerTask('install', 'make install', ['bower_install', 'clean:install', 'copy:install']);
-  grunt.registerTask('start', 'start server', ['install', 'connect', 'watch']);
-  grunt.registerTask('default', ['test']);
+  grunt.registerTask('install',       'make install',  ['bower_install', 'clean:install', 'copy:install']);
+
+  grunt.registerTask('test',          'make test',     ['install', 'karma:' + env]);
+  grunt.registerTask('coverage',      'make coverage', ['install', 'karma:coverage', 'connect:coverage']);
+
+  grunt.registerTask('start',         'start server',  ['install', 'connect:livereload', 'watch']);
+
+  grunt.registerTask('default',       '',              ['test']);
 };

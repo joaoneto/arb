@@ -4,5 +4,6 @@ node_modules
 bower_components
 nbproject
 src/components
+coverage
 .idea
 *.log
