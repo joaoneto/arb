@@ -84,7 +84,7 @@ module.exports = function (grunt) {
           open: true,
           middleware: function (connect) {
             var dir = grunt.file.glob.sync(require('path').resolve(config.coverage_path + '/PhantomJS*'))[0];
-            return [lrSnippet, mountFolder(connect, dir)];
+            return [mountFolder(connect, dir)];
           }
         }
       },
