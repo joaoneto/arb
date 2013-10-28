@@ -4,6 +4,20 @@ var config = {
   src_path: './src',
   components_path: '<%= config.src_path %>/components',
   coverage_path:  './coverage',
+  test_path:  './test',
+  packages: [
+    { name: 'controllers' },
+    { name: 'directives' },
+    { name: 'services' }
+  ],
+  deps: {
+    jquery: '../components/jquery/jquery',
+    angular: '../components/angular/angular',
+    ngMockE2E: '../components/angular-mocks/angular-mocks',
+    ngResource: '../components/angular-resource/angular-resource.min',
+    ngBootstrap: '../components/angular-bootstrap/ui-bootstrap-tpls.min',
+    ngUiRouter: '../components/angular-ui-router/angular-ui-router.min',
+  }
 };
 
 var lrSnippet = require('grunt-contrib-livereload/lib/utils').livereloadSnippet;
@@ -28,11 +42,22 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  // grunt.loadNpmTasks('grunt-contrib-requirejs');
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
 
     config: config,
+
+    // requirejs: {
+    //   compile_test: {
+    //     options: {
+    //       baseUrl: 'path/to/base',
+    //       mainConfigFile: '<%= config.test_path %>/main.js',
+    //       out: '<%= config.test_path %>/main.js'
+    //     }
+    //   }
+    // },
 
     karma: {
       options: {
@@ -96,6 +121,22 @@ module.exports = function (grunt) {
     },
 
     copy: {
+      main: {
+        options: {
+          processContent: (function (content) {
+            return grunt.template.process(content, { data: { type: 'main' } });
+          })
+        },
+        files: [{ src: ['<%= config.src_path %>/main.js.tmpl'], dest: '<%= config.src_path %>/main.js' }],
+      },
+      test_main: {
+        options: {
+          processContent: (function (content) {
+            return grunt.template.process(content, { data: { type: 'test' } });
+          })
+        },
+        files: [{ src: ['<%= config.src_path %>/main.js.tmpl'], dest: '<%= config.src_path %>/main.js' }],
+      },
       install: {
         files: [
           { expand: true,
@@ -120,7 +161,7 @@ module.exports = function (grunt) {
   grunt.registerTask('bower_install', 'install bower components', bowerInstall);
   grunt.registerTask('install',       'make install',  ['bower_install', 'clean:install', 'copy:install']);
 
-  grunt.registerTask('test',          'make test',     ['install', 'karma:' + env]);
+  grunt.registerTask('test',          'make test',     ['install', 'copy:test_main', 'karma:' + env]);
   grunt.registerTask('coverage',      'make coverage', ['install', 'karma:coverage', 'connect:coverage']);
 
   grunt.registerTask('start',         'start server',  ['install', 'connect:livereload', 'watch']);

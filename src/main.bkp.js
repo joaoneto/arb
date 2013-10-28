@@ -11,12 +11,12 @@ require.config({
 
   // Component paths
   paths: {
-    jquery: '../../components/jquery/jquery',
-    angular: '../../components/angular/angular',
-    ngMockE2E: '../../components/angular-mocks/angular-mocks',
-    ngResource: '../../components/angular-resource/angular-resource.min',
-    ngBootstrap: '../../components/angular-bootstrap/ui-bootstrap-tpls.min',
-    ngUiRouter: '../../components/angular-ui-router/angular-ui-router.min',
+    jquery: '../components/jquery/jquery',
+    angular: '../components/angular/angular',
+    ngMockE2E: '../components/angular-mocks/angular-mocks',
+    ngResource: '../components/angular-resource/angular-resource.min',
+    ngBootstrap: '../components/angular-bootstrap/ui-bootstrap-tpls.min',
+    ngUiRouter: '../components/angular-ui-router/angular-ui-router.min',
   },
 
   // Dependencies orders

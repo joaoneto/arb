@@ -1,0 +1,82 @@
+<% if (type == 'test') { %>
+var tests = Object.keys(window.__karma__.files).filter(function (file) {
+  return /\.spec\.js$/.test(file);
+});
+<% } %>require.config({
+  // Relative path (referring to the path ../index.html)
+  baseUrl: '<%= (type == 'test') ? "/base/src" : "./scripts" %>',
+
+  // Bunddle packages
+  packages: [
+<%
+  var packages = grunt.config('config.packages'),
+      len = packages.length;
+
+  while (len--) {
+    var keys = Object.keys(packages[len]).reverse(),
+        i = keys.length,
+        name = '';
+
+    print('    { ');
+
+    while (i--) {
+      name = keys[i];
+      print(name + ': \'' + packages[len][name] + '\'');
+      if (i) {
+        print(',\n');
+      }
+    }
+
+    if (len) {
+      print(' },\n');
+    } else {
+      print(' }');
+    }
+  }
+%>
+  ],
+
+  // Component paths
+  paths: {
+<%
+  var deps = grunt.config('config.deps'),
+      keys = Object.keys(deps).reverse(),
+      len = keys.length,
+      name = '';
+
+  while (len--) {
+    name = keys[len];
+    print('    ' + name + ': \'' + deps[name] + '\'');
+    if (len) {
+      print(',\n');
+    }
+  }
+%>
+  },
+
+  // Dependencies orders
+  shim: {
+    jquery: {
+      exports: 'jQuery'
+    },
+    angular: {
+      exports: 'angular',
+      deps: ['jquery']
+    },
+    ngMockE2E: ['angular'],
+    ngResource: ['angular'],
+    ngBootstrap: ['angular'],
+    ngUiRouter: ['angular']
+  }
+<% if (type == 'test') { %>
+  deps: tests,
+
+  callback: window.__karma__.start
+<% } %>
+})
+
+<% if (type == 'main') { %>
+// Require base files
+require(['jquery', 'angular', 'app']);
+
+<% } %>

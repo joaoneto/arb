@@ -4,7 +4,8 @@ module.exports = function (config) {
       { pattern: 'src/components/**/*.js', included: false },
       { pattern: 'src/scripts/**/*.js', included: false },
       { pattern: 'test/**/*.spec.js', included: false },
-      'test/test-main.js',
+      // { pattern: 'src/main.js', included: false },
+      'test/test-main.js'
     ],
     exclude: [
       'src/scripts/main.js'
