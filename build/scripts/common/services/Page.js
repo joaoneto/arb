@@ -1,35 +1,32 @@
-define(['angular'], function (angular) {
-  return angular
-    .module('arb.common.services.Page', [])
+angular
+  .module('arb.common.services.Page', [])
 
-    .factory('Page', ['$rootScope', 'conf', 'Auth', function ($rootScope, conf, Auth) {
-      $rootScope.page = {
-        title: 'ARB',
-        appName: conf.get('appName'),
-        currentUser: Auth.currentUser()
-      };
+  .factory('Page', ['$rootScope', 'conf', 'Auth', function ($rootScope, conf, Auth) {
+    $rootScope.page = {
+      title: 'ARB',
+      appName: conf.get('appName'),
+      currentUser: Auth.currentUser()
+    };
 
-      $rootScope.$on('auth.currentuser', function (event, message) {
-        $rootScope.page.currentUser = message;
-      });
+    $rootScope.$on('auth.currentuser', function (event, message) {
+      $rootScope.page.currentUser = message;
+    });
 
-      $rootScope.$on('auth.authenticated', function (event, message) {
-        $rootScope.page.currentUser = message;
-      });
+    $rootScope.$on('auth.authenticated', function (event, message) {
+      $rootScope.page.currentUser = message;
+    });
 
-      return {
-        get: function (key) {
-          return $rootScope.page[key];
-        },
-        set: function (key, val) {
-          $rootScope.page[key] = val;
-        }
-      };
-    }])
+    return {
+      get: function (key) {
+        return $rootScope.page[key];
+      },
+      set: function (key, val) {
+        $rootScope.page[key] = val;
+      }
+    };
+  }])
 
-    .run(['$rootScope', 'Page', 'Auth', function ($rootScope, Page, Auth) {
-      $rootScope.Page = Page;
-      $rootScope.Auth = Auth;
-    }])
-
-});
+  .run(['$rootScope', 'Page', 'Auth', function ($rootScope, Page, Auth) {
+    $rootScope.Page = Page;
+    $rootScope.Auth = Auth;
+  }])

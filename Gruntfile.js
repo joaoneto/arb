@@ -59,7 +59,8 @@ module.exports = function (grunt) {
     watch: {
       server: {
         options: { livereload: true },
-        files: ['<%= config.src_path %>/**/*']
+        files: ['<%= config.src_path %>/**/*'],
+        task: ['build']
       },
     },
 
@@ -123,16 +124,16 @@ module.exports = function (grunt) {
               'respond/*.js',
             ],
             dest: '<%= config.components_path %>' },
-          { expand: true, cwd: 'bower_components/angular-ui-router/release', src: ['*.js'], dest: '<%= config.components_path %>/angular-ui-router' },
-          { expand: true, cwd: 'bower_components/html5shiv/dist', src: ['**'], dest: '<%= config.components_path %>/html5shiv' },
-          { expand: true, cwd: 'bower_components/bootstrap/dist', src: ['**'], dest: '<%= config.components_path %>/bootstrap' },
+          { expand: true, cwd: 'bower_components/angular-ui-router', src: ['release/*.js'], dest: '<%= config.components_path %>/angular-ui-router' },
+          { expand: true, cwd: 'bower_components/html5shiv', src: ['dist/**'], dest: '<%= config.components_path %>/html5shiv' },
+          { expand: true, cwd: 'bower_components/bootstrap', src: ['dist/**'], dest: '<%= config.components_path %>/bootstrap' },
         ]
       }
     },
 
     bower: {
         options: {
-            pathFromTo: { from: '../bower_components', to: 'components' }
+            pathFromTo: { from: '../bower_components', to: '../components' }
         },
         target: {
             rjsConfig: '<%= config.build_require %>',
@@ -147,7 +148,8 @@ module.exports = function (grunt) {
   grunt.registerTask('test',          'make test',     ['install', 'karma:' + env]);
   grunt.registerTask('coverage',      'make coverage', ['install', 'karma:coverage', 'connect:coverage']);
 
-  grunt.registerTask('build',         'make build',    ['clean:build', 'copy:build', 'bower', 'connect:build']);
+  grunt.registerTask('build',         'make build',    ['clean:build', 'install', 'copy:build', 'bower']);
+  grunt.registerTask('start-build',   'start server on build',  ['build', 'connect:build', 'watch:server']);
   grunt.registerTask('start',         'start server',  ['install', 'bower', 'connect:server', 'watch:server']);
 
   grunt.registerTask('default',       '',              ['test']);
