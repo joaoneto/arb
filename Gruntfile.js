@@ -2,11 +2,12 @@ var env = process.env.CI ? 'continuous' : 'unit';
 
 var config = {
   src_path: './src',
-  components_path: '<%= config.src_path %>/components',
+  build_path: './build',
+  components_path: '<%= config.build_path %>/components',
   coverage_path:  './coverage',
+  src_require: '<%= config.src_path %>/config/require.js',
+  build_require: '<%= config.build_path %>/config/require.js'
 };
-
-var lrSnippet = require('grunt-contrib-livereload/lib/utils').livereloadSnippet;
 
 var mountFolder = function (connect, dir) {
   return connect.static(require('path').resolve(dir));
@@ -23,11 +24,7 @@ module.exports = function (grunt) {
     });
   };
 
-  grunt.loadNpmTasks('grunt-karma');
-  grunt.loadNpmTasks('grunt-contrib-clean');
-  grunt.loadNpmTasks('grunt-contrib-copy');
-  grunt.loadNpmTasks('grunt-contrib-connect');
-  grunt.loadNpmTasks('grunt-contrib-watch');
+  require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
@@ -60,19 +57,30 @@ module.exports = function (grunt) {
     },
 
     watch: {
-      livereload: {
-        files: ['<%= config.src_path %>/**/*'],
-        options: { livereload: true }
+      server: {
+        options: { livereload: true },
+        files: ['<%= config.src_path %>/**/*']
       },
     },
 
     connect: {
-      livereload: {
+      build: {
         options: {
           port: 9000,
           hostname: '0.0.0.0',
+          livereload: true,
           middleware: function (connect) {
-            return [lrSnippet, mountFolder(connect, config.src_path)];
+            return [mountFolder(connect, config.build_path)];
+          }
+        }
+      },
+      server: {
+        options: {
+          port: 9000,
+          hostname: '0.0.0.0',
+          livereload: true,
+          middleware: function (connect) {
+            return [mountFolder(connect, config.src_path)];
           }
         }
       },
@@ -91,11 +99,18 @@ module.exports = function (grunt) {
     },
 
     clean: {
+      build: { src: ['<%= config.build_path %>'] },
       install: { src: ['<%= config.components_path %>'] },
       coverage: { src: ['<%= config.coverage_path %>'] },
     },
 
     copy: {
+      build: {
+        files: [{ src: '**', dest: '<%= config.build_path %>' ,cwd: '<%= config.src_path %>', expand: true }]
+      },
+      test: {},
+      release: {},
+      cov: {},
       install: {
         files: [
           { expand: true,
@@ -114,6 +129,15 @@ module.exports = function (grunt) {
         ]
       }
     },
+
+    bower: {
+        options: {
+            pathFromTo: { from: '../bower_components', to: 'components' }
+        },
+        target: {
+            rjsConfig: '<%= config.build_require %>',
+        }
+    },
   });
 
 
@@ -123,7 +147,8 @@ module.exports = function (grunt) {
   grunt.registerTask('test',          'make test',     ['install', 'karma:' + env]);
   grunt.registerTask('coverage',      'make coverage', ['install', 'karma:coverage', 'connect:coverage']);
 
-  grunt.registerTask('start',         'start server',  ['install', 'connect:livereload', 'watch']);
+  grunt.registerTask('build',         'make build',    ['clean:build', 'copy:build', 'bower', 'connect:build']);
+  grunt.registerTask('start',         'start server',  ['install', 'bower', 'connect:server', 'watch:server']);
 
   grunt.registerTask('default',       '',              ['test']);
 };

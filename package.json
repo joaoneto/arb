@@ -32,6 +32,8 @@
     "karma-firefox-launcher": "~0.1.0",
     "karma-html2js-preprocessor": "~0.1.0",
     "karma-phantomjs-launcher": "~0.1.0",
-    "karma-spec-reporter": "~0.0.6"
+    "karma-spec-reporter": "~0.0.6",
+    "matchdep": "~0.3.0",
+    "grunt-bower-requirejs": "git://github.com/gabrielmancini/grunt-bower-requirejs.git"
   }
 }

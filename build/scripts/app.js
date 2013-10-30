@@ -1,9 +1,15 @@
 // don't forget to remove `lib/api-mocks` and `arb.lib.apiMocks` dependencies, to use the real api
-define('app', ['angular'], function () {
-  var deps = amd(['arb.common.confProvider', 'arb.common.resolverProvider', 'arb.common.apiMocks', 'ui.bootstrap']);
-// console.log(deps)
+define([
+  'angular',
+  'common/conf-provider',
+  'common/resolver-provider',
+  'common/api-mocks',
+  'services',
+  'controllers',
+  'ngBootstrap'
+], function () {
   angular
-    .module('arb', deps)
+    .module('arb', ['arb.lib.conf', 'arb.lib.resolver', 'arb.lib.apiMocks', 'arb.services', 'arb.controllers', 'ui.bootstrap'])
 
     .config(['$httpProvider', function ($httpProvider) {
       $httpProvider.defaults.useXDomain = true;
