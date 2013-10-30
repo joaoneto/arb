@@ -1,0 +1,9 @@
+define([
+  'common/security/Auth',
+  'common/services/Page',
+  'common/services/Notifications',
+  'common/apiMocks',
+  'common/confProvider',
+  'common/resolverProvider',
+  'common/sessionStorage',
+]);
