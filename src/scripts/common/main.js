@@ -1,8 +1,10 @@
 angular
   .module('arb.common', [
-    'arb.common.services',
-    'arb.common.security',
+    'arb.common.apiMocks',
     'arb.common.resolverProvider', 
     'arb.common.confProvider', 
-    'arb.common.apiMocks'
+    'arb.common.sessionStorage',
+    
+    'arb.common.services',
+    'arb.common.security'
   ]);

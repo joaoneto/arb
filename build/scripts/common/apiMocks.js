@@ -1,6 +1,4 @@
 angular.module('arb.common.apiMocks', [
-  'arb.common.confProvider',
-  'arb.common.sessionStorage',
   'ngMockE2E'
   ])
   .run(['$httpBackend', '$log', '$timeout', 'conf', 'sessionStorage', function ($httpBackend, $log, $timeout, conf, sessionStorage) {
