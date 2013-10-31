@@ -1,5 +1,5 @@
 angular
-  .module('arb.common.security.Auth', ['arb.common.sessionStorage'])
+  .module('arb.common.security.Auth', [])
 
   .factory('Auth', ['$rootScope', '$http', '$q', 'conf', 'sessionStorage',
     function ($rootScope, $http, $q, conf, sessionStorage) {
