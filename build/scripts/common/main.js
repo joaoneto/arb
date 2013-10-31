@@ -1,9 +1,8 @@
 angular
-  .module('arb.common.security', [
-    'arb.common.security.Auth'
+  .module('arb.common', [
+    'arb.common.services',
+    'arb.common.security',
+    'arb.common.resolverProvider', 
+    'arb.common.confProvider', 
+    'arb.common.apiMocks'
   ]);
-angular  
-  .module('arb.common.services', [
-    'arb.common.services.Page',
-    'arb.common.services.Notifications'
-  ])

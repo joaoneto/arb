@@ -1,7 +1,11 @@
 // don't forget to remove `lib/api-mocks` and `arb.lib.apiMocks` dependencies, to use the real api
 // console.log(deps)
 angular
-  .module('arb', ['arb.common.resolverProvider', 'arb.common.confProvider', 'arb.common.apiMocks', 'arb.common.services', 'arb.common.security', 'arb.controllers'])
+  .module('arb', [
+    'arb.common', 
+    'arb.controllers',
+    'arb.directives'
+  ])
 
   .config(['$httpProvider', function ($httpProvider) {
     $httpProvider.defaults.useXDomain = true;

@@ -1,6 +1,8 @@
 define([
+  'common/services/main',
   'common/services/Notifications',
   'common/services/Page',
+  'common/security/main',
   'common/security/Auth',
   'common/resolverProvider',
   'common/sessionStorage',

@@ -3,9 +3,9 @@ require.config({
   baseUrl: './scripts',
 
   // Bunddle packages
-  packages: [
-    { name: 'common' },
-  ],
+  // packages: [
+  //   { name: 'common' },
+  // ],
 
   // Component paths
 
