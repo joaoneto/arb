@@ -1,7 +1,3 @@
-define([
-  'angular',
-  // 'directives/foo-directive',
-], function () {
-  return angular
+angular
     .module('arb.directives', []);
-});
+

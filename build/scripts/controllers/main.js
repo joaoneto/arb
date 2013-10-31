@@ -1,12 +1,4 @@
-define([
-  'angular',
-  'directives',
-  'ngUiRouter',
-  'controllers/AppCtrl',
-  'controllers/LoginCtrl',
-  'controllers/NavbarCtrl',
-], function () {
-  return angular
+angular
     .module('arb.controllers', [
       'ui.router',
       'arb.directives',
@@ -14,4 +6,3 @@ define([
       'arb.controllers.LoginCtrl',
       'arb.controllers.NavbarCtrl'
     ]);
-});

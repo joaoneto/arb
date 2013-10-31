@@ -12,17 +12,8 @@ var config = {
 var mountFolder = function (connect, dir) {
   return connect.static(require('path').resolve(dir));
 };
-
+        
 module.exports = function (grunt) {
-  var bowerInstall = function () {
-    var exec = require('child_process').exec,
-        cb = this.async();
-    grunt.log.writeln('Install bower components');
-    exec('node_modules/.bin/bower install', { cwd: './' }, function (err, stdout, stderr) {
-      grunt.log.writeln('Done.');
-      cb();
-    });
-  };
 
   require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
 
@@ -60,7 +51,7 @@ module.exports = function (grunt) {
       server: {
         options: { livereload: true },
         files: ['<%= config.src_path %>/**/*'],
-        task: ['build']
+        tasks: ['build']
       },
     },
 
@@ -141,8 +132,25 @@ module.exports = function (grunt) {
     },
   });
 
+  grunt.registerTask('bower_install', function () {
+    var done = this.async();
+    var spawn = require('child_process').spawn;
+    var ls = spawn('bower', ['install']);
 
-  grunt.registerTask('bower_install', 'install bower components', bowerInstall);
+    ls.stdout.on('data', function (data) {
+      grunt.log.write(data);
+    });
+
+    ls.stderr.on('data', function (data) {
+      grunt.log.write(data);
+    });
+
+    ls.on('close', function (code) {
+      grunt.log.writeln('child process exited with code ' + code);
+      done();
+    });
+  });
+
   grunt.registerTask('install',       'make install',  ['bower_install', 'clean:install', 'copy:install']);
 
   grunt.registerTask('test',          'make test',     ['install', 'karma:' + env]);

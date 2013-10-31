@@ -1,9 +1,17 @@
 define([
-  'common/security/Auth',
-  'common/services/Page',
   'common/services/Notifications',
-  'common/apiMocks',
-  'common/confProvider',
+  'common/services/Page',
+  'common/security/Auth',
   'common/resolverProvider',
   'common/sessionStorage',
+  'common/confProvider',
+  'common/main',
+  'common/apiMocks',
+  'controllers/AppCtrl',
+  'controllers/LoginCtrl',
+  'controllers/UsersCtrl',
+  'controllers/NavbarCtrl',
+  'controllers/main',
+  'directives/main'
 ]);
+
