@@ -36,7 +36,7 @@ require.config({
     'angular-resource': ['angular'],
     'angular-bootstrap': ['angular'],
     'angular-ui-router': ['angular'],
-    'amd.map': ['angular-mocks', 'angular-resource'],
-    app : ['amd.map', 'angular-ui-router', 'angular-bootstrap'],
+    'src.map': ['angular-mocks', 'angular-resource'],
+    app: ['src.map', 'angular-ui-router', 'angular-bootstrap'],
   }
 })

@@ -22,12 +22,12 @@ require.config({
     'angular-ui-router': [
       'angular'
     ],
-    'amd.map': [
+    'src.map': [
       'angular-mocks',
       'angular-resource'
     ],
     app: [
-      'amd.map',
+      'src.map',
       'angular-ui-router',
       'angular-bootstrap'
     ]
