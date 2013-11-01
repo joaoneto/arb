@@ -1,12 +1,11 @@
 var env = process.env.CI ? 'continuous' : 'unit';
 
 var config = {
-  src_path: './src',
-  build_path: './build',
+  src_path: 'src',
+  build_path: 'build',
   components_path: '<%= config.build_path %>/components',
   coverage_path:  './coverage',
-  src_require: '<%= config.src_path %>/config/require.js',
-  build_require: '<%= config.build_path %>/config/require.js'
+  require: 'config/require.js'
 };
 
 var mountFolder = function (connect, dir) {
@@ -48,10 +47,15 @@ module.exports = function (grunt) {
     },
 
     watch: {
-      server: {
+      build: {
         options: { livereload: true },
         files: ['<%= config.src_path %>/**/*'],
         tasks: ['build']
+      },
+      src: {
+        options: { livereload: true },
+        files: ['<%= config.src_path %>/**/*'],
+        tasks: ['env-src']
       },
     },
 
@@ -66,13 +70,13 @@ module.exports = function (grunt) {
           }
         }
       },
-      server: {
+      src: {
         options: {
           port: 9000,
           hostname: '0.0.0.0',
           livereload: true,
           middleware: function (connect) {
-            return [mountFolder(connect, config.src_path)];
+            return [mountFolder(connect, config.build_path), mountFolder(connect, config.src_path)];
           }
         }
       },
@@ -91,19 +95,27 @@ module.exports = function (grunt) {
     },
 
     clean: {
-      build: { src: ['<%= config.build_path %>'] },
-      install: { src: ['<%= config.components_path %>'] },
-      coverage: { src: ['<%= config.coverage_path %>'] },
+      source: [
+        '<%= config.build_path %>/**/*',
+        '!<%= config.components_path %>/**', 
+        '!<%= config.build_path %>/<%= config.require %>'
+      ],
+      deps: ['<%= config.components_path %>'],
+      coverage: ['<%= config.coverage_path %>'],
+      require: ['<%= config.build_path %>/<%= config.require %>']
     },
 
     copy: {
-      build: {
-        files: [{ src: '**', dest: '<%= config.build_path %>' ,cwd: '<%= config.src_path %>', expand: true }]
+      source: {
+        files: [{ src: ['**', '!<%= config.require %>'], dest: '<%= config.build_path %>' ,cwd: '<%= config.src_path %>', expand: true }]
+      },
+      require: {
+        files: [{ src: '<%= config.require %>', dest: '<%= config.build_path %>' ,cwd: '<%= config.src_path %>', expand: true }]
       },
       test: {},
       release: {},
       cov: {},
-      install: {
+      deps: {
         files: [
           { expand: true,
             cwd: 'bower_components',
@@ -127,9 +139,19 @@ module.exports = function (grunt) {
             pathFromTo: { from: '../bower_components', to: '../components' }
         },
         target: {
-            rjsConfig: '<%= config.build_require %>',
+            rjsConfig: '<%= config.build_path %>/<%= config.require %>',
         }
     },
+
+    'require-map': {
+      options: {
+        fileName: '<%= config.build_path %>/scripts/src.map.js'
+      },
+      files: { 
+        src: ['scripts/**/*.js', '!scripts/app.js'],
+        cwd: '<%= config.src_path %>'
+      }
+    }
   });
 
   grunt.registerTask('bower_install', function () {
@@ -151,14 +173,42 @@ module.exports = function (grunt) {
     });
   });
 
-  grunt.registerTask('install',       'make install',  ['bower_install', 'clean:install', 'copy:install']);
 
-  grunt.registerTask('test',          'make test',     ['install', 'karma:' + env]);
-  grunt.registerTask('coverage',      'make coverage', ['install', 'karma:coverage', 'connect:coverage']);
+  grunt.registerMultiTask('require-map', 'Generate require map of src', function() {
 
-  grunt.registerTask('build',         'make build',    ['clean:build', 'install', 'copy:build', 'bower']);
-  grunt.registerTask('start-build',   'start server on build',  ['build', 'connect:build', 'watch:server']);
-  grunt.registerTask('start',         'start server',  ['install', 'bower', 'connect:server', 'watch:server']);
+    var head = '/* Automatic generetad by require-map */'
+    var template = '<%= head %>\n\ndefine([\n<%= files %>\n])';
+    var files = '\t"' + this.filesSrc.join('",\n\t"') + '"';
+    var data = {
+      files: files,
+      head: head
+    }
+    var contents = grunt.template.process(template, { data: data }  );
 
-  grunt.registerTask('default',       '',              ['test']);
+    grunt.file.write(this.options().fileName, contents);  
+    grunt.log.ok('Success generate file:' + this.options().fileName);
+
+  });
+
+
+  grunt.registerTask('deps',           'install bower and copy to build',           ['bower_install', 'clean:deps', 'copy:deps']);
+  grunt.registerTask('source',         'copy source to build',                      ['clean:source', 'copy:source']);
+  grunt.registerTask('require',        'copy require to build and resolve deps',    ['clean:require', 'copy:require', 'bower', 'require-map']);
+
+  grunt.registerTask('build',          'make build using: [deps, source, require]', ['deps', 'source', 'require']);
+  grunt.registerTask('server-build',   'start server on build',                     ['build', 'connect:build', 'watch:build']);
+
+  grunt.registerTask('env-src',        'create env for src: [deps, require]',       ['deps', 'require']);
+  grunt.registerTask('server',         'start server',                              ['env-src', 'connect:src', 'watch:src']);
+
+  grunt.registerTask('release',        '', []);
+  grunt.registerTask('server-release', '', []);
+
+  grunt.registerTask('test-build',     '', []);
+  grunt.registerTask('test',           'make test',   ['install', 'karma:' + env]);
+  grunt.registerTask('test-release',   '', []);
+
+  grunt.registerTask('coverage',       'make coverage', ['install', 'karma:coverage', 'connect:coverage']);
+  grunt.registerTask('default',        '',              ['test']);
+
 };
