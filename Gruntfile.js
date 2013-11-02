@@ -1,5 +1,5 @@
 var env = process.env.CI ? 'continuous' : 'unit';
-
+var utils = require('./lib/utils');
 var config = {
   src_path: 'src',
   build_path: 'build',
@@ -8,13 +8,10 @@ var config = {
   require: 'config/require.js'
 };
 
-var mountFolder = function (connect, dir) {
-  return connect.static(require('path').resolve(dir));
-};
-        
 module.exports = function (grunt) {
-
+  // grunt plugins
   require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
+  grunt.loadTasks('lib/tasks');
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
@@ -66,7 +63,7 @@ module.exports = function (grunt) {
           hostname: '0.0.0.0',
           livereload: true,
           middleware: function (connect) {
-            return [mountFolder(connect, config.build_path)];
+            return [utils.mountFolder(connect, config.build_path)];
           }
         }
       },
@@ -76,7 +73,7 @@ module.exports = function (grunt) {
           hostname: '0.0.0.0',
           livereload: true,
           middleware: function (connect) {
-            return [mountFolder(connect, config.build_path), mountFolder(connect, config.src_path)];
+            return [utils.mountFolder(connect, config.build_path), utils.mountFolder(connect, config.src_path)];
           }
         }
       },
@@ -88,7 +85,7 @@ module.exports = function (grunt) {
           open: true,
           middleware: function (connect) {
             var dir = grunt.file.glob.sync(require('path').resolve(config.coverage_path + '/PhantomJS*'))[0];
-            return [mountFolder(connect, dir)];
+            return [utils.mountFolder(connect, dir)];
           }
         }
       },
@@ -97,7 +94,7 @@ module.exports = function (grunt) {
     clean: {
       source: [
         '<%= config.build_path %>/**/*',
-        '!<%= config.components_path %>/**', 
+        '!<%= config.components_path %>/**',
         '!<%= config.build_path %>/<%= config.require %>'
       ],
       deps: ['<%= config.components_path %>'],
@@ -135,65 +132,28 @@ module.exports = function (grunt) {
     },
 
     bower: {
-        options: {
-            pathFromTo: { from: '../bower_components', to: '../components' }
-        },
-        target: {
-            rjsConfig: '<%= config.build_path %>/<%= config.require %>',
-        }
+      options: {
+        pathFromTo: { from: '../bower_components', to: '../components' }
+      },
+      target: {
+        rjsConfig: '<%= config.build_path %>/<%= config.require %>',
+      }
     },
 
-    'require-map': {
+    require_map: {
       options: {
         fileName: '<%= config.build_path %>/scripts/src.map.js'
       },
-      files: { 
+      files: {
         src: ['scripts/**/*.js', '!scripts/app.js'],
         cwd: '<%= config.src_path %>'
       }
     }
   });
 
-  grunt.registerTask('bower_install', function () {
-    var done = this.async();
-    var spawn = require('child_process').spawn;
-    var ls = spawn('bower', ['install']);
-
-    ls.stdout.on('data', function (data) {
-      grunt.log.write(data);
-    });
-
-    ls.stderr.on('data', function (data) {
-      grunt.log.write(data);
-    });
-
-    ls.on('close', function (code) {
-      grunt.log.writeln('child process exited with code ' + code);
-      done();
-    });
-  });
-
-
-  grunt.registerMultiTask('require-map', 'Generate require map of src', function() {
-
-    var head = '/* Automatic generetad by require-map */'
-    var template = '<%= head %>\n\ndefine([\n<%= files %>\n])';
-    var files = '\t"' + this.filesSrc.join('",\n\t"') + '"';
-    var data = {
-      files: files,
-      head: head
-    }
-    var contents = grunt.template.process(template, { data: data }  );
-
-    grunt.file.write(this.options().fileName, contents);  
-    grunt.log.ok('Success generate file:' + this.options().fileName);
-
-  });
-
-
   grunt.registerTask('deps',           'install bower and copy to build',           ['bower_install', 'clean:deps', 'copy:deps']);
   grunt.registerTask('source',         'copy source to build',                      ['clean:source', 'copy:source']);
-  grunt.registerTask('require',        'copy require to build and resolve deps',    ['clean:require', 'copy:require', 'bower', 'require-map']);
+  grunt.registerTask('require',        'copy require to build and resolve deps',    ['clean:require', 'copy:require', 'bower', 'require_map']);
 
   grunt.registerTask('build',          'make build using: [deps, source, require]', ['deps', 'source', 'require']);
   grunt.registerTask('server-build',   'start server on build',                     ['build', 'connect:build', 'watch:build']);
@@ -210,5 +170,4 @@ module.exports = function (grunt) {
 
   grunt.registerTask('coverage',       'make coverage', ['install', 'karma:coverage', 'connect:coverage']);
   grunt.registerTask('default',        '',              ['test']);
-
 };
