@@ -4,7 +4,7 @@ var config = {
   src_path: 'src',
   build_path: 'build',
   components_path: '<%= config.build_path %>/components',
-  coverage_path:  './coverage',
+  coverage_path:  'coverage',
   require: 'config/require.js'
 };
 
@@ -19,11 +19,12 @@ module.exports = function (grunt) {
     config: config,
 
     karma: {
-      options: {
-        configFile: 'karma.conf.js'
-      },
+      // options: {
+      //   configFile: 'karma.conf.js'
+      // },
       unit: {
-        browsers: ['ChromeCanary']
+        configFile: 'lib/karma.source.conf.js',
+        browsers: ['Chrome']
       },
       continuous: {
         autoWatch: false,
@@ -49,7 +50,7 @@ module.exports = function (grunt) {
         files: ['<%= config.src_path %>/**/*'],
         tasks: ['build']
       },
-      src: {
+      source: {
         options: { livereload: true },
         files: ['<%= config.src_path %>/**/*'],
         tasks: ['env-src']
@@ -67,7 +68,7 @@ module.exports = function (grunt) {
           }
         }
       },
-      src: {
+      source: {
         options: {
           port: 9000,
           hostname: '0.0.0.0',
@@ -99,15 +100,15 @@ module.exports = function (grunt) {
       ],
       deps: ['<%= config.components_path %>'],
       coverage: ['<%= config.coverage_path %>'],
-      require: ['<%= config.build_path %>/<%= config.require %>']
+      require: ['<%= config.require %>']
     },
 
     copy: {
       source: {
-        files: [{ src: ['**', '!<%= config.require %>'], dest: '<%= config.build_path %>' ,cwd: '<%= config.src_path %>', expand: true }]
+        files: [{ src: ['**', '!<%= config.require_source %>'], dest: '<%= config.build_path %>', cwd: '<%= config.src_path %>', expand: true }]
       },
       require: {
-        files: [{ src: '<%= config.require %>', dest: '<%= config.build_path %>' ,cwd: '<%= config.src_path %>', expand: true }]
+        files: [{ src: '<%= config.require %>', dest: '<%= config.build_path %>', cwd: '<%= config.src_path %>', expand: true }]
       },
       test: {},
       release: {},
@@ -135,9 +136,9 @@ module.exports = function (grunt) {
       options: {
         pathFromTo: { from: '../bower_components', to: '../components' }
       },
-      target: {
-        rjsConfig: '<%= config.build_path %>/<%= config.require %>',
-      }
+      source: {
+        rjsConfig: '<%= config.build_path %>/<%= config.require %>'
+      },
     },
 
     require_map: {
@@ -151,23 +152,24 @@ module.exports = function (grunt) {
     }
   });
 
-  grunt.registerTask('deps',           'install bower and copy to build',           ['bower_install', 'clean:deps', 'copy:deps']);
-  grunt.registerTask('source',         'copy source to build',                      ['clean:source', 'copy:source']);
-  grunt.registerTask('require',        'copy require to build and resolve deps',    ['clean:require', 'copy:require', 'bower', 'require_map']);
+  grunt.registerTask('deps',           'install bower components and copy to build',       ['bower_install', 'clean:deps', 'copy:deps']);
+  grunt.registerTask('source',         'copy source to build',                             ['clean:source', 'copy:source']);
+  grunt.registerTask('require',        'copy require to build and resolve deps',           ['clean:require', 'copy:require', 'bower:source', 'require_map']);
 
-  grunt.registerTask('build',          'make build using: [deps, source, require]', ['deps', 'source', 'require']);
-  grunt.registerTask('server-build',   'start server on build',                     ['build', 'connect:build', 'watch:build']);
+  grunt.registerTask('build',          'make build using: [deps|source|require]',   ['deps', 'source', 'require']);
+  grunt.registerTask('server_build',   'start server on build',                     ['build', 'connect:build', 'watch:build']);
 
-  grunt.registerTask('env-src',        'create env for src: [deps, require]',       ['deps', 'require']);
-  grunt.registerTask('server',         'start server',                              ['env-src', 'connect:src', 'watch:src']);
+  grunt.registerTask('env_source',     'create env for source: [deps|require]',     ['deps', 'require']);
+  grunt.registerTask('server',         'start server',                              ['env_source', 'connect:source', 'watch:source']);
 
-  grunt.registerTask('release',        '', []);
-  grunt.registerTask('server-release', '', []);
+  grunt.registerTask('release',        '',                                          []);
+  grunt.registerTask('server_release', '',                                          []);
 
-  grunt.registerTask('test-build',     '', []);
-  grunt.registerTask('test',           'make test',   ['install', 'karma:' + env]);
-  grunt.registerTask('test-release',   '', []);
+  grunt.registerTask('test',           'make test',                                 ['env_source', 'karma:' + env]);
 
-  grunt.registerTask('coverage',       'make coverage', ['install', 'karma:coverage', 'connect:coverage']);
-  grunt.registerTask('default',        '',              ['test']);
+  grunt.registerTask('test_build',     'not implemented',                           []);
+  grunt.registerTask('test_release',   'not implemented',                           []);
+
+  grunt.registerTask('coverage',       'make coverage',                             ['install', 'karma:coverage', 'connect:coverage']);
+  grunt.registerTask('default',        '',                                          ['test']);
 };
