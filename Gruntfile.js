@@ -105,7 +105,7 @@ module.exports = function (grunt) {
 
     copy: {
       source: {
-        files: [{ src: ['**', '!<%= config.require_source %>'], dest: '<%= config.build_path %>', cwd: '<%= config.src_path %>', expand: true }]
+        files: [{ src: ['**', '!<%= config.require %>'], dest: '<%= config.build_path %>', cwd: '<%= config.src_path %>', expand: true }]
       },
       require: {
         files: [{ src: '<%= config.require %>', dest: '<%= config.build_path %>', cwd: '<%= config.src_path %>', expand: true }]
