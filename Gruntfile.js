@@ -7,7 +7,7 @@ var config = {
   coverage_path:  'coverage',
   require: 'config/require.js'
 };
- 
+
 
 module.exports = function (grunt) {
   // grunt plugins
@@ -144,7 +144,7 @@ module.exports = function (grunt) {
       },
       test: {
         options: {
-          pathFromTo: { from: '../bower_components', to: '/base/build/components' },
+          pathFromTo: { from: '../bower_components', to: '../components' },
         },
         rjsConfig: '<%= config.build_path %>/<%= config.require %>'
       },
