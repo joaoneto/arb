@@ -1,5 +1,5 @@
 var env = process.env.CI ? 'continuous' : 'unit';
-var utils = require('./lib/utils');
+var path = require('path');
 var config = {
   src_path: 'src',
   build_path: 'build',
@@ -7,9 +7,14 @@ var config = {
   coverage_path:  'coverage',
   require: 'config/require.js'
 };
+ 
 
 module.exports = function (grunt) {
   // grunt plugins
+  var mountFolder = function (connect, dir) {
+    return connect.static(path.resolve(dir));
+  };
+
   require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
   grunt.loadTasks('lib/tasks');
 
@@ -19,12 +24,10 @@ module.exports = function (grunt) {
     config: config,
 
     karma: {
-      // options: {
-      //   configFile: 'karma.conf.js'
-      // },
+      options: {
+        configFile: 'karma.conf.js'
+      },
       unit: {
-        configFile: 'lib/karma.source.conf.js',
-        browsers: ['Chrome']
       },
       continuous: {
         autoWatch: false,
@@ -64,7 +67,7 @@ module.exports = function (grunt) {
           hostname: '0.0.0.0',
           livereload: true,
           middleware: function (connect) {
-            return [utils.mountFolder(connect, config.build_path)];
+            return [mountFolder(connect, config.build_path)];
           }
         }
       },
@@ -74,7 +77,7 @@ module.exports = function (grunt) {
           hostname: '0.0.0.0',
           livereload: true,
           middleware: function (connect) {
-            return [utils.mountFolder(connect, config.build_path), utils.mountFolder(connect, config.src_path)];
+            return [mountFolder(connect, config.build_path), mountFolder(connect, config.src_path)];
           }
         }
       },
@@ -86,7 +89,7 @@ module.exports = function (grunt) {
           open: true,
           middleware: function (connect) {
             var dir = grunt.file.glob.sync(require('path').resolve(config.coverage_path + '/PhantomJS*'))[0];
-            return [utils.mountFolder(connect, dir)];
+            return [mountFolder(connect, dir)];
           }
         }
       },
@@ -133,10 +136,16 @@ module.exports = function (grunt) {
     },
 
     bower: {
-      options: {
-        pathFromTo: { from: '../bower_components', to: '../components' }
-      },
       source: {
+        options: {
+          pathFromTo: { from: '../bower_components', to: '../components' },
+        },
+        rjsConfig: '<%= config.build_path %>/<%= config.require %>'
+      },
+      test: {
+        options: {
+          pathFromTo: { from: '../bower_components', to: '/base/build/components' },
+        },
         rjsConfig: '<%= config.build_path %>/<%= config.require %>'
       },
     },
@@ -152,24 +161,26 @@ module.exports = function (grunt) {
     }
   });
 
-  grunt.registerTask('deps',           'install bower components and copy to build',       ['bower_install', 'clean:deps', 'copy:deps']);
-  grunt.registerTask('source',         'copy source to build',                             ['clean:source', 'copy:source']);
-  grunt.registerTask('require',        'copy require to build and resolve deps',           ['clean:require', 'copy:require', 'bower:source', 'require_map']);
+  grunt.registerTask('deps',           'install bower components and copy to build',            ['bower_install', 'clean:deps', 'copy:deps']);
+  grunt.registerTask('source',         'copy source to build',                                  ['clean:source', 'copy:source']);
+  grunt.registerTask('require',        'copy require to build and resolve deps',                ['clean:require', 'copy:require', 'bower:source', 'require_map']);
 
-  grunt.registerTask('build',          'make build using: [deps|source|require]',   ['deps', 'source', 'require']);
-  grunt.registerTask('server_build',   'start server on build',                     ['build', 'connect:build', 'watch:build']);
+  grunt.registerTask('build',          'make build using: [deps|source|require]',               ['deps', 'source', 'require']);
+  grunt.registerTask('server_build',   'start server on build',                                 ['build', 'connect:build', 'watch:build']);
 
-  grunt.registerTask('env_source',     'create env for source: [deps|require]',     ['deps', 'require']);
-  grunt.registerTask('server',         'start server',                              ['env_source', 'connect:source', 'watch:source']);
+  grunt.registerTask('env_source',     'create env for source: [deps|require]',                 ['deps', 'require']);
+  grunt.registerTask('server',         'start server',                                          ['env_source', 'connect:source', 'watch:source']);
 
-  grunt.registerTask('release',        '',                                          []);
-  grunt.registerTask('server_release', '',                                          []);
+  grunt.registerTask('release',        '',                                                      []);
+  grunt.registerTask('server_release', '',                                                      []);
 
-  grunt.registerTask('test',           'make test',                                 ['env_source', 'karma:' + env]);
+  grunt.registerTask('require_test',   'copy require to build and resolve deps on test',        ['clean:require', 'copy:require', 'bower:test', 'require_map']);
+  grunt.registerTask('build_test',     'make build using for test: [deps|source|require_test]', ['deps', 'source', 'require_test']);
+  grunt.registerTask('test',           'make test',                                             ['build_test', 'karma:' + env]);
 
-  grunt.registerTask('test_build',     'not implemented',                           []);
-  grunt.registerTask('test_release',   'not implemented',                           []);
+  grunt.registerTask('test_build',     'not implemented',                                       []);
+  grunt.registerTask('test_release',   'not implemented',                                       []);
 
-  grunt.registerTask('coverage',       'make coverage',                             ['install', 'karma:coverage', 'connect:coverage']);
-  grunt.registerTask('default',        '',                                          ['test']);
+  grunt.registerTask('coverage',       'make coverage',                                         ['install', 'karma:coverage', 'connect:coverage']);
+  grunt.registerTask('default',        '',                                                      ['test']);
 };
