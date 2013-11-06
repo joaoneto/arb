@@ -1,8 +1,9 @@
 module.exports = function (config) {
   config.set({
-    basePath: '',
+    basePath: '.',
     files: [
-      {pattern: 'build/**/*.js', included: false},
+      {pattern: 'build/components/**/*.js', included: false},
+      {pattern: 'build/scripts/**/*.js', included: false},
       {pattern: 'src/scripts/**/*spec.js', included: false},
       {pattern: 'test/**/*spec.js', included: false},
       'test/test-main.js'
@@ -47,7 +48,7 @@ module.exports = function (config) {
     // - Opera
     // - Safari
     // - PhantomJS
-    browsers: ['PhantomJS'],
+    browsers: ['Chrome'],
 //    browsers: ['Chrome'],
 
     // Continuous Integration mode

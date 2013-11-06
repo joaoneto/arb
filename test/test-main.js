@@ -1,48 +1,72 @@
-// var tests = Object.keys(window.__karma__.files).filter(function (file) {
-//   return /\.spec\.js$/.test(file);
-// });
-// console.log(Object.keys(window.__karma__.files))
-// requirejs.config({
-//   baseUrl: '/base/src/scripts',
+var tests = [];
+for (var file in window.__karma__.files) {
+  if (window.__karma__.files.hasOwnProperty(file)) {
+    if (/Spec\.js$/.test(file)) {
+      tests.push(file);
+    }
+  }
+}
 
-//   // Bunddle packages
-//   packages: [
-//     { name: 'controllers' },
-//     { name: 'directives' },
-//     { name: 'services' }
-//   ],
+//console.log(window.__karma__.files)
 
-//   // Component paths
-//   paths: {
-//     jquery: '../components/jquery/jquery',
-//     angular: '../components/angular/angular',
-//     ngMockE2E: '../components/angular-mocks/angular-mocks',
-//     ngResource: '../components/angular-resource/angular-resource.min',
-//     ngBootstrap: '../components/angular-bootstrap/ui-bootstrap-tpls.min',
-//     ngUiRouter: '../components/angular-ui-router/angular-ui-router.min'
-//   },
+requirejs.config({
+    // Karma serves files from '/base'
+    baseUrl: '/base/src',
 
-//   // Dependencies orders
-//   shim: {
-//     jquery: {
-//       exports: 'jQuery'
-//     },
-//     angular: {
-//       exports: 'angular',
-//       deps: ['jquery']
-//     },
-//     ngMockE2E: ['angular'],
-//     ngResource: ['angular'],
-//     ngBootstrap: ['angular'],
-//     ngUiRouter: ['angular']
-//   },
+    shim: {
+      jquery: {
+        exports: 'jQuery'
+      },
+      angular: {
+        exports: 'angular',
+        deps: [
+          'jquery'
+        ]
+      },
+      'angular-mocks': [
+        'angular'
+      ],
+      'angular-resource': [
+        'angular'
+      ],
+      'angular-bootstrap': [
+        'angular'
+      ],
+      'angular-ui-router': [
+        'angular'
+      ],
+      'src.map': [
+        'angular-mocks',
+        'angular-resource'
+      ],
+      app: [
+        'src.map',
+        'angular-ui-router',
+        'angular-bootstrap'
+      ]
+    },
+    paths: {
+      'angular-mocks': 'components/angular-mocks/angular-mocks',
+      'angular-bootstrap': 'components/angular-bootstrap/ui-bootstrap-tpls',
+      'angular-resource': 'components/angular-resource/angular-resource',
+      angular: 'components/angular/angular',
+      'angular-ui-router': 'components/angular-ui-router/release/angular-ui-router.min',
+      bootstrap: 'components/bootstrap/dist/js/bootstrap',
+      jquery: 'components/jquery/jquery',
+      requirejs: 'components/requirejs/require',
+      respond: 'components/respond/respond.src',
+      html5shiv: 'components/html5shiv/dist/html5shiv',
+      'html5shiv-printshiv': 'components/html5shiv/dist/html5shiv-printshiv'
+    },
 
-//   deps: tests,
+    // ask Require.js to load these files (all our tests)
+    deps: tests,
 
-//   callback: window.__karma__.start
-// });
+    // start test run, once Require.js is done
+    callback: window.__karma__.start
+});
 
-require(['require', '/base/build/config/require.js'], function (require) {
+//require(['require', '/base/build/config/require.js'], function (require) {
   // Require base files
   require(['app']);
-});
+//});
