@@ -1,12 +1,20 @@
 module.exports = function (config) {
   config.set({
 //    basePath: '.',
+    frameworks: [
+      'jasmine',
+      'requirejs',
+      // 'chai',
+      // 'chai-as-promised',
+      // 'sinon-chai',
+    ],
+
     files: [
       {pattern: 'bower_components/**/*.js', included: false},
       {pattern: 'test/**/*.spec.js', included: false},
       {pattern: 'src/**/*.js', included: false},
       
-      'src/test-main.js'
+      'test/test-main.js'
     ],
 
     // list of files to exclude
@@ -16,13 +24,6 @@ module.exports = function (config) {
 
     reporters: ['spec'],
 
-    frameworks: [
-      'jasmine',
-      'requirejs',
-      'chai',
-      'chai-as-promised',
-      'sinon-chai'
-    ],
     // web server port
     port: 8089,
 
@@ -52,7 +53,7 @@ module.exports = function (config) {
     // - Safari
     // - PhantomJS
 //    browsers: ['PhantomJS'],
-    browsers: ['Chrome'],
+    browsers: ['PhantomJS'],
 
     // Continuous Integration mode
     // if true, it capture browsers, run tests and exit
