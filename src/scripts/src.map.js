@@ -1,0 +1,24 @@
+/* Automatic generetad by require_map */
+define([
+  "scripts/article/ArticleCtrl.js",
+  "scripts/article/ArticleCtrl.spec.js",
+  "scripts/article/index.js",
+  "scripts/common/apiMocks.js",
+  "scripts/common/confProvider.js",
+  "scripts/common/confProvider.spec.js",
+  "scripts/common/index.js",
+  "scripts/common/resolverProvider.js",
+  "scripts/common/security/Auth.js",
+  "scripts/common/security/index.js",
+  "scripts/common/services/Article.js",
+  "scripts/common/services/Notifications.js",
+  "scripts/common/services/Page.js",
+  "scripts/common/services/index.js",
+  "scripts/common/sessionStorage.js",
+  "scripts/controllers/AppCtrl.js",
+  "scripts/controllers/LoginCtrl.js",
+  "scripts/controllers/NavbarCtrl.js",
+  "scripts/controllers/UsersCtrl.js",
+  "scripts/controllers/index.js",
+  "scripts/directives/index.js"
+])

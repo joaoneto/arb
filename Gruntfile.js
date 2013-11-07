@@ -99,7 +99,7 @@ module.exports = function (grunt) {
       build: ['<%= config.build_path %>'],
       deps: ['<%= config.components_path %>'],
       coverage: ['<%= config.coverage_path %>'],
-      require: ['<%= config.require %>']
+      require: ['<%= config.src_path %>/<%= config.require %>']
     },
 
     copy: {
@@ -107,7 +107,7 @@ module.exports = function (grunt) {
         files: [{ src: ['**', '!<%= config.require %>'], dest: '<%= config.build_path %>', cwd: '<%= config.src_path %>', expand: true }]
       },
       require: {
-        files: [{ src: '<%= config.require %>', dest: '<%= config.src_path %>/<%= config.build_path %>', cwd: '.', expand: true }]
+        files: [{ src: '<%= config.require %>', dest: '<%= config.src_path %>/<%= config.build_path %>', cwd: './', expand: true }]
       },
       test: {},
       release: {},
