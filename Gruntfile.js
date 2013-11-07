@@ -6,6 +6,7 @@ var config = {
   components_path: 'build/components',
   coverage_path:  'coverage',
   require: 'config/require.js',
+  require_map: 'scripts/src.map.js'
 };
 
 
@@ -16,7 +17,6 @@ module.exports = function (grunt) {
   };
 
   require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
-  grunt.loadTasks('lib/tasks');
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
@@ -99,7 +99,8 @@ module.exports = function (grunt) {
       build: ['<%= config.build_path %>'],
       deps: ['<%= config.components_path %>'],
       coverage: ['<%= config.coverage_path %>'],
-      require: ['<%= config.src_path %>/<%= config.require %>']
+      require: ['<%= config.src_path %>/<%= config.require %>'],
+      require_map: ['<%= config.src_path %>/<%= config.require_map %>']
     },
 
     copy: {
@@ -107,7 +108,7 @@ module.exports = function (grunt) {
         files: [{ src: ['**', '!<%= config.require %>'], dest: '<%= config.build_path %>', cwd: '<%= config.src_path %>', expand: true }]
       },
       require: {
-        files: [{ src: '<%= config.require %>', dest: '<%= config.src_path %>/<%= config.build_path %>', cwd: './', expand: true }]
+        files: [{ src: '<%= config.require %>', dest: '<%= config.src_path %>', cwd: './', expand: true }]
       },
       test: {},
       release: {},
@@ -139,7 +140,7 @@ module.exports = function (grunt) {
 
     require_map: {
       options: {
-        fileName: '<%= config.src_path %>/scripts/src.map.js'
+        fileName: '<%= config.src_path %>/<%= config.require_map %>'
       },
       files: {
         src: ['scripts/**/*.js', '!scripts/app.js'],
@@ -150,7 +151,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('deps',           'install bower components and copy to build',            ['bower_install', 'clean:deps', 'copy:deps']);
   grunt.registerTask('source',         'copy source to build',                                  ['clean:build', 'copy:build']);
-  grunt.registerTask('require',        'copy require to build and resolve deps',                ['clean:require', 'copy:require', 'bower', 'require_map']);
+  grunt.registerTask('require',        'copy require to build and resolve deps',                ['clean:require', 'copy:require', 'bower', 'clean:require_map', 'require_map']);
 
   grunt.registerTask('build',          'make build using: [deps|source|require]',               ['source', 'deps', 'require']);
   grunt.registerTask('server_build',   'start server on build',                                 ['build', 'connect:build', 'watch:build']);

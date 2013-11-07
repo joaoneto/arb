@@ -8,3 +8,5 @@ coverage
 build
 .idea
 *.log
+src/scripts/src.map.js
+src/config/require.js
