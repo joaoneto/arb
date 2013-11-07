@@ -22,10 +22,9 @@
   }
 })(this);
 
-
 require.config({
     // Karma serves files from '/base'
-  baseUrl: '/base/src/scripts',
+  baseUrl: '/base/scripts',
   shim: {
     jquery: {
       exports: 'jQuery'
@@ -50,12 +49,12 @@ require.config({
     ],
     'src.map': [
       'angular',
-      'angular-mocks',
       'angular-resource',
       'angular-ui-router',
       'angular-bootstrap',
     ],
     app: [
+      'angular-mocks',
       'src.map'
     ]
   },

@@ -6,12 +6,12 @@ module.exports = function (config) {
       {pattern: 'test/**/*.spec.js', included: false},
       {pattern: 'src/**/*.js', included: false},
       
-      'test/test-main.js'
+      'src/test-main.js'
     ],
 
     // list of files to exclude
     exclude: [
-        'src/main.js'
+      'src/main.js'
     ],
 
     reporters: ['spec'],

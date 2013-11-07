@@ -15,10 +15,17 @@ requirejs.config({
     'angular-resource': ['angular'],
     'angular-bootstrap': ['angular'],
     'angular-ui-router': ['angular'],
-    'src.map': ['angular-mocks', 'angular-resource'],
-    app: ['src.map', 'angular-ui-router', 'angular-bootstrap'],
-  }
+    'src.map': [
+      'angular-mocks',
+      'angular-resource',
+      'angular-ui-router',
+      'angular-bootstrap',
+    ],    
+    app: [
+      'src.map'
+    ]
+  },
   // paths: {
-  //   arb: 'app.js'
+  //   'src.map': 'src.map'
   // }
 })

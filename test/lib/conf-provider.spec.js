@@ -1,4 +1,4 @@
-define(['app', 'angular','angular-mocks'], function(App, angular, ngMocks) {
+require(['app', 'angular-mocks'], function(app, module) {
 
   describe('confProvider', function () {
     var confProvider;

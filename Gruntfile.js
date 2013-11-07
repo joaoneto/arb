@@ -6,7 +6,7 @@ var config = {
   components_path: 'build/bower_components',
   coverage_path:  'coverage',
   require: 'config/require.js',
-  require_map: 'config/src.map.js'
+  require_map: 'scripts/src.map.js'
 };
 
 
@@ -146,7 +146,7 @@ module.exports = function (grunt) {
           fileName: '<%= config.src_path %>/<%= config.require_map %>'
         },
         files: [{
-          src: ['scripts/**/*.js', '!scripts/app.js'],
+          src: ['scripts/**/*.js', '!scripts/app.js', '!scripts/**/*.spec.js'],
           cwd: '<%= config.src_path %>'
         }]
       }, 
@@ -174,7 +174,7 @@ module.exports = function (grunt) {
   grunt.registerTask('release',        '',                                                      []);
   grunt.registerTask('server_release', '',                                                      []);
 
-  grunt.registerTask('test',           'make test',                                             ['build', 'copy:base', 'require_map:base', 'clean:base', 'karma:' + env]);
+  grunt.registerTask('test',           'make test',                                             ['copy:base', 'require_map:base', 'clean:base', 'karma:' + env]);
 
   grunt.registerTask('test_build',     'not implemented',                                       []);
   grunt.registerTask('test_release',   'not implemented',                                       []);
