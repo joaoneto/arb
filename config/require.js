@@ -1,4 +1,4 @@
-require.config({
+requirejs.config({
   // Relative path (referring to the path ../index.html)
   baseUrl: './scripts',
 
@@ -18,4 +18,7 @@ require.config({
     'src.map': ['angular-mocks', 'angular-resource'],
     app: ['src.map', 'angular-ui-router', 'angular-bootstrap'],
   }
+  // paths: {
+  //   arb: 'app.js'
+  // }
 })

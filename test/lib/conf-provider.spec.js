@@ -1,4 +1,5 @@
-define(['angular', 'ngMockE2E', 'lib/conf-provider'], function () {
+define(['app', 'angular','angular-mocks'], function(App, angular, ngMocks) {
+
   describe('confProvider', function () {
     var confProvider;
 

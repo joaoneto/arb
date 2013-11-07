@@ -3,10 +3,10 @@ var path = require('path');
 var config = {
   src_path: 'src',
   build_path: 'build/app',
-  components_path: 'build/components',
+  components_path: 'build/bower_components',
   coverage_path:  'coverage',
   require: 'config/require.js',
-  require_map: 'scripts/src.map.js'
+  require_map: 'config/src.map.js'
 };
 
 
@@ -77,7 +77,7 @@ module.exports = function (grunt) {
           hostname: '0.0.0.0',
           livereload: true,
           middleware: function (connect) {
-            return [mountFolder(connect, config.build_path), mountFolder(connect, config.src_path)];
+            return [mountFolder(connect, '.')];
           }
         }
       },
@@ -96,22 +96,24 @@ module.exports = function (grunt) {
     },
 
     clean: {
-      build: ['<%= config.build_path %>'],
+      build: ['<%= config.build_path %>/**/*', '!<%= config.build_path %>/<%= config.require %>'],
       deps: ['<%= config.components_path %>'],
       coverage: ['<%= config.coverage_path %>'],
       require: ['<%= config.src_path %>/<%= config.require %>'],
-      require_map: ['<%= config.src_path %>/<%= config.require_map %>']
+      require_map: ['<%= config.src_path %>/<%= config.require_map %>'],
+      base: ['base']
     },
 
     copy: {
       build: {
-        files: [{ src: ['**', '!<%= config.require %>'], dest: '<%= config.build_path %>', cwd: '<%= config.src_path %>', expand: true }]
+        files: [{ src: ['**'], dest: '<%= config.build_path %>', cwd: '<%= config.src_path %>', expand: true }]
       },
       require: {
         files: [{ src: '<%= config.require %>', dest: '<%= config.src_path %>', cwd: './', expand: true }]
       },
-      test: {},
-      release: {},
+      base: {
+        files: [{ src: '<%= config.src_path %>/**', dest: 'base', cwd: './', expand: true }]        
+      },
       cov: {},
       deps: {
         files: [
@@ -133,37 +135,46 @@ module.exports = function (grunt) {
     },
 
     bower: {
-      source: {        
+      source: {
         rjsConfig: '<%= config.src_path %>/<%= config.require %>'
       }
     },
 
     require_map: {
-      options: {
-        fileName: '<%= config.src_path %>/<%= config.require_map %>'
-      },
-      files: {
-        src: ['scripts/**/*.js', '!scripts/app.js'],
-        cwd: '<%= config.src_path %>'
-      }
+      source: {
+        options: {
+          fileName: '<%= config.src_path %>/<%= config.require_map %>'
+        },
+        files: [{
+          src: ['scripts/**/*.js', '!scripts/app.js'],
+          cwd: '<%= config.src_path %>'
+        }]
+      }, 
+      base: {
+        options: {
+          fileName: '<%= config.src_path %>/<%= config.require_map %>'
+        },
+        files: [{
+          src: ['base/src/scripts/**/*.js', '!base/src/scripts/app.js', '!base/src/scripts/src.map.js'],
+          cwd: '.'
+        }]
+      }    
     }
   });
 
   grunt.registerTask('deps',           'install bower components and copy to build',            ['bower_install', 'clean:deps', 'copy:deps']);
   grunt.registerTask('source',         'copy source to build',                                  ['clean:build', 'copy:build']);
-  grunt.registerTask('require',        'copy require to build and resolve deps',                ['clean:require', 'copy:require', 'bower', 'clean:require_map', 'require_map']);
+  grunt.registerTask('require',        'copy require to build and resolve deps',                ['clean:require', 'copy:require', 'bower', 'clean:require_map', 'require_map:source']);
 
-  grunt.registerTask('build',          'make build using: [deps|source|require]',               ['source', 'deps', 'require']);
+  grunt.registerTask('build',          'make build using: [deps|source|require]',               ['require', 'source', 'deps']);
   grunt.registerTask('server_build',   'start server on build',                                 ['build', 'connect:build', 'watch:build']);
 
-  grunt.registerTask('server',         'start server',                                          ['deps', 'require', 'connect:source', 'watch:source']);
+  grunt.registerTask('server',         'start server',                                          ['bower_install', 'require', 'connect:source', 'watch:source']);
 
   grunt.registerTask('release',        '',                                                      []);
   grunt.registerTask('server_release', '',                                                      []);
 
-  grunt.registerTask('require_test',   'copy require to build and resolve deps on test',        ['clean:require', 'copy:require', 'bower:test', 'require_map']);
-  grunt.registerTask('build_test',     'make build using for test: [deps|source|require_test]', ['deps', 'source', 'require_test']);
-  grunt.registerTask('test',           'make test',                                             ['build_test', 'karma:' + env]);
+  grunt.registerTask('test',           'make test',                                             ['build', 'copy:base', 'require_map:base', 'clean:base', 'karma:' + env]);
 
   grunt.registerTask('test_build',     'not implemented',                                       []);
   grunt.registerTask('test_release',   'not implemented',                                       []);

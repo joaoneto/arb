@@ -1,16 +1,19 @@
 module.exports = function (config) {
   config.set({
-    basePath: '.',
+//    basePath: '.',
     files: [
-      {pattern: 'build/components/**/*.js', included: false},
-      {pattern: 'build/scripts/**/*.js', included: false},
-      {pattern: 'src/scripts/**/*spec.js', included: false},
-      {pattern: 'test/**/*spec.js', included: false},
+      {pattern: 'bower_components/**/*.js', included: false},
+      {pattern: 'test/**/*.spec.js', included: false},
+      {pattern: 'src/**/*.js', included: false},
+      
       'test/test-main.js'
     ],
+
+    // list of files to exclude
     exclude: [
-      'src/main.js',
+        'src/main.js'
     ],
+
     reporters: ['spec'],
 
     frameworks: [
@@ -26,7 +29,7 @@ module.exports = function (config) {
     // cli runner port
     runnerPort: 9109,
 
-    urlRoot: '/__test/',
+//    urlRoot: '/__test/',
 
     // enable / disable colors in the output (reporters and logs)
     colors: true,
@@ -48,8 +51,8 @@ module.exports = function (config) {
     // - Opera
     // - Safari
     // - PhantomJS
+//    browsers: ['PhantomJS'],
     browsers: ['Chrome'],
-//    browsers: ['Chrome'],
 
     // Continuous Integration mode
     // if true, it capture browsers, run tests and exit
