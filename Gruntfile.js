@@ -2,10 +2,10 @@ var env = process.env.CI ? 'continuous' : 'unit';
 var path = require('path');
 var config = {
   src_path: 'src',
-  build_path: 'build',
-  components_path: '<%= config.build_path %>/components',
+  build_path: 'build/app',
+  components_path: 'build/components',
   coverage_path:  'coverage',
-  require: 'config/require.js'
+  require: 'config/require.js',
 };
 
 
@@ -96,22 +96,18 @@ module.exports = function (grunt) {
     },
 
     clean: {
-      source: [
-        '<%= config.build_path %>/**/*',
-        '!<%= config.components_path %>/**',
-        '!<%= config.build_path %>/<%= config.require %>'
-      ],
+      build: ['<%= config.build_path %>'],
       deps: ['<%= config.components_path %>'],
       coverage: ['<%= config.coverage_path %>'],
       require: ['<%= config.require %>']
     },
 
     copy: {
-      source: {
+      build: {
         files: [{ src: ['**', '!<%= config.require %>'], dest: '<%= config.build_path %>', cwd: '<%= config.src_path %>', expand: true }]
       },
       require: {
-        files: [{ src: '<%= config.require %>', dest: '<%= config.build_path %>', cwd: '<%= config.src_path %>', expand: true }]
+        files: [{ src: '<%= config.require %>', dest: '<%= config.src_path %>/<%= config.build_path %>', cwd: '.', expand: true }]
       },
       test: {},
       release: {},
@@ -136,23 +132,14 @@ module.exports = function (grunt) {
     },
 
     bower: {
-      source: {
-        options: {
-          pathFromTo: { from: '../bower_components', to: '../components' },
-        },
-        rjsConfig: '<%= config.build_path %>/<%= config.require %>'
-      },
-      test: {
-        options: {
-          pathFromTo: { from: '../bower_components', to: '../components' },
-        },
-        rjsConfig: '<%= config.build_path %>/<%= config.require %>'
-      },
+      source: {        
+        rjsConfig: '<%= config.src_path %>/<%= config.require %>'
+      }
     },
 
     require_map: {
       options: {
-        fileName: '<%= config.build_path %>/scripts/src.map.js'
+        fileName: '<%= config.src_path %>/scripts/src.map.js'
       },
       files: {
         src: ['scripts/**/*.js', '!scripts/app.js'],
@@ -162,14 +149,13 @@ module.exports = function (grunt) {
   });
 
   grunt.registerTask('deps',           'install bower components and copy to build',            ['bower_install', 'clean:deps', 'copy:deps']);
-  grunt.registerTask('source',         'copy source to build',                                  ['clean:source', 'copy:source']);
-  grunt.registerTask('require',        'copy require to build and resolve deps',                ['clean:require', 'copy:require', 'bower:source', 'require_map']);
+  grunt.registerTask('source',         'copy source to build',                                  ['clean:build', 'copy:build']);
+  grunt.registerTask('require',        'copy require to build and resolve deps',                ['clean:require', 'copy:require', 'bower', 'require_map']);
 
-  grunt.registerTask('build',          'make build using: [deps|source|require]',               ['deps', 'source', 'require']);
+  grunt.registerTask('build',          'make build using: [deps|source|require]',               ['source', 'deps', 'require']);
   grunt.registerTask('server_build',   'start server on build',                                 ['build', 'connect:build', 'watch:build']);
 
-  grunt.registerTask('env_source',     'create env for source: [deps|require]',                 ['deps', 'require']);
-  grunt.registerTask('server',         'start server',                                          ['env_source', 'connect:source', 'watch:source']);
+  grunt.registerTask('server',         'start server',                                          ['deps', 'require', 'connect:source', 'watch:source']);
 
   grunt.registerTask('release',        '',                                                      []);
   grunt.registerTask('server_release', '',                                                      []);
