@@ -16,19 +16,40 @@ angular
     }
   ])
 
-  .config(['$routeProvider', 'resolverProvider', function ($routeProvider, resolverProvider) {
-    resolverProvider
-      .add({
-        currentUser: ['Auth', function (Auth) {
-          return Auth.currentUser();
-        }]
-      })
+  .config(['$stateProvider', '$urlRouterProvider', 'resolverProvider', 
+    function ($stateProvider, $urlRouterProvider, resolverProvider) {
+      resolverProvider
+        .add({
+          currentUser: ['Auth', function (Auth) {
+            return Auth.currentUser();
+          }]
+        })
 
-    $routeProvider
-      .when('/', {
-        controller: 'AppCtrl',
-        templateUrl: 'partials/default.html',
-        resolve: resolverProvider.get(['currentUser'])
-      })
-      .otherwise({redirectTo: '/'});
+      $urlRouterProvider.otherwise('/');
+
+      $stateProvider
+        .state('arb', {
+          url: '/',
+          controller: 'AppCtrl',
+          resolve: resolverProvider.get(['currentUser']),
+          views: {
+            'header': {
+              templateUrl: 'partials/templates/navbar.html',
+              controller: 'NavbarCtrl'
+            },
+            'container' : { 
+              controller: 'AppCtrl'
+            },
+            'footer':{
+              templateUrl: 'partials/templates/footer.html'
+            }
+          }
+        })
+    // $routeProvider
+    //   .when('/', {
+    //     controller: 'AppCtrl',
+    //     templateUrl: 'partials/default.html',
+    //     resolve: resolverProvider.get(['currentUser'])
+    //   })
+    //   .otherwise({redirectTo: '/'});
   }])
