@@ -22,13 +22,10 @@ requirejs.config({
       'src.map'
     ]
   },
-  map: {
-    '*': {
-      'angular-ui-router': '../../bower_components/angular-ui-router/release/angular-ui-router'
-    },
-  },
 
   paths: {
-    'src.map': '../config/src.map'
-  }
+    'src.map': '../config/src.map',
+    'angular-ui-router': '../../bower_components/angular-ui-router/release/angular-ui-router'
+  },
+  
 })

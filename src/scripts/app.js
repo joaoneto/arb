@@ -3,8 +3,8 @@
 angular
   .module('arb', [
     'arb.common', 
-    'arb.controllers',
-    'arb.directives'
+    'arb.directives',
+    'arb.feature',
   ])
 
   .config(['$httpProvider', function ($httpProvider) {

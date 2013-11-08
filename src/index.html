@@ -11,14 +11,15 @@
       body { padding-top: 50px; }bower_components
     </style>
 
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="components/html5shiv/html5shiv.js"></script>
-      <script src="components/respond/respond.min.js"></script>
-    <![endif]-->
   </head>
   <body>
+    <div ui-view></div>
     <ng-view></ng-view>
     <script data-main="main" src="../bower_components/requirejs/require.js"></script>
+    <!--[if lt IE 9]>
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+      <script src="../bower_components/html5shiv/dist/html5shiv.js"></script>
+      <script src="../bower_components/respond/respond.min.js"></script>
+    <![endif]-->
   </body>
 </html>

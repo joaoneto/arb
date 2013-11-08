@@ -5,6 +5,8 @@ angular
     'arb.common.confProvider', 
     'arb.common.sessionStorage',
     
+    'arb.common.controllers',
     'arb.common.services',
-    'arb.common.security'
+    'arb.common.security',
+
   ]);

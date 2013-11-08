@@ -1,6 +1,5 @@
 angular
-  .module('arb.controllers.LoginCtrl', [])
-
+  .module('arb.feature.login.LoginCtrl', [])
   .controller('LoginCtrl', ['$scope', '$location', 'Page', 'Auth',
     function ($scope, $location, Page, Auth) {
       console.log('LoginCtrl called');
@@ -23,7 +22,7 @@ angular
     $routeProvider
       .when('/login', {
         controller: 'LoginCtrl',
-        templateUrl: 'partials/login.html',
+        templateUrl: 'scripts/feature/login/login.html',
         resolve: resolverProvider.get(['currentUser'])
       })
       .when('/logout', {
@@ -32,6 +31,6 @@ angular
             $location.path('/');
           });
         }],
-        templateUrl: 'partials/login.html'
+        templateUrl: 'scripts/feature/login/login.html'
       });
   }])

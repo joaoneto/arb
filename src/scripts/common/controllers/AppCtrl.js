@@ -1,5 +1,5 @@
 angular
-  .module('arb.controllers.AppCtrl', [])
+  .module('arb.common.controllers.AppCtrl', ['ui.router'])
 
   .controller('AppCtrl', ['$scope', '$rootScope', '$state', 'Page', 'Auth', 'Notifications',
     function ($scope, $rootScope, $state, Page, Auth, Notifications) {

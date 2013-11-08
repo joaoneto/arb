@@ -1,5 +1,5 @@
 angular
-  .module('arb.controllers.NavbarCtrl', [])
+  .module('arb.common.controllers.NavbarCtrl', [])
 
   .controller('NavbarCtrl', ['$scope', 'conf', 'Page', function ($scope, conf, Page) {
     console.log('NavbarCtrl called');
