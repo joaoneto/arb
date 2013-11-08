@@ -1,19 +1,19 @@
 module.exports = function (config) {
   config.set({
-//    basePath: '.',
+    basePath: '',
     frameworks: [
       'jasmine',
       'requirejs',
-      // 'chai',
-      // 'chai-as-promised',
-      // 'sinon-chai',
+      'chai',
+      'chai-as-promised',
+      'sinon-chai',
     ],
 
     files: [
-      {pattern: 'bower_components/**/*.js', included: false},
-      {pattern: 'test/**/*.spec.js', included: false},
-      {pattern: 'src/**/*.js', included: false},
-      
+      {pattern: 'bower_components/**/*.js',                    included: false},
+      {pattern: 'src/**/*.js',                  watched: true, included: false},
+      {pattern: 'test/**/*.spec.js',            watched: true, included: false},
+      'bower_components/requirejs/require.js',
       'test/test-main.js'
     ],
 
@@ -37,7 +37,7 @@ module.exports = function (config) {
 
     // level of logging
     // possible values: LOG_DISABLE || LOG_ERROR || LOG_WARN || LOG_INFO || LOG_DEBUG
-    //logLevel: LOG_INFO,
+    logLevel: config.LOG_DEBUG,
 
     // enable / disable watching file and executing tests whenever any file changes
     autoWatch: false,
@@ -52,7 +52,6 @@ module.exports = function (config) {
     // - Opera
     // - Safari
     // - PhantomJS
-//    browsers: ['PhantomJS'],
     browsers: ['PhantomJS'],
 
     // Continuous Integration mode

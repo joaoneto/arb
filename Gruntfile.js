@@ -2,11 +2,12 @@ var env = process.env.CI ? 'continuous' : 'unit';
 var path = require('path');
 var config = {
   src_path: 'src',
-  build_path: 'build/app',
+  build_path: 'build',
+  release_path: 'release',
   components_path: 'build/bower_components',
   coverage_path:  'coverage',
   require: 'config/require.js',
-  require_map: 'scripts/src.map.js'
+  require_map: 'config/src.map.js'
 };
 
 
@@ -28,6 +29,8 @@ module.exports = function (grunt) {
         configFile: 'karma.conf.js'
       },
       unit: {
+        autoWatch: true,
+        singleRun: false,   
       },
       continuous: {
         autoWatch: false,
@@ -61,6 +64,17 @@ module.exports = function (grunt) {
     },
 
     connect: {
+      release: {
+        options: {
+          port: 9000,
+          hostname: '0.0.0.0',
+          livereload: false,
+          keepalive: true,
+          middleware: function (connect) {
+            return [mountFolder(connect, config.release_path)];
+          }
+        }
+      },
       build: {
         options: {
           port: 9000,
@@ -155,29 +169,51 @@ module.exports = function (grunt) {
           fileName: '<%= config.src_path %>/<%= config.require_map %>'
         },
         files: [{
-          src: ['base/src/scripts/**/*.js', '!base/src/scripts/app.js', '!base/src/scripts/src.map.js'],
+          src: ['base/src/scripts/**/*.js', '!base/src/scripts/app.js', '!base/src/scripts/**/*.spec.js', '!base/src/scripts/src.map.js'],
           cwd: '.'
         }]
       }    
+    },
+
+    requirejs: {
+      compile: {
+        options: {
+          appDir                  : './<%= config.build_path %>',
+          dir                     : './release',
+          mainConfigFile          : './<%= config.build_path %>/main.js',
+          optimize                : 'uglify2',
+          generateSourceMaps      : false,
+          preserveLicenseComments : false,
+          findNestedDependencies  : true,
+          fileExclusionRegExp: /\.min\.js/,
+          catchError: {
+            define: true
+          },
+          paths: {
+            jquery: 'empty:',
+            angular: 'empty:',
+            'angular-mocks': 'empty:',
+            'angular-resource': 'empty:',
+            'angular-bootstrap': 'empty:',
+            'angular-ui-router': 'empty:',    
+          },
+        }
+      }
     }
+
   });
 
   grunt.registerTask('deps',           'install bower components and copy to build',            ['bower_install', 'clean:deps', 'copy:deps']);
   grunt.registerTask('source',         'copy source to build',                                  ['clean:build', 'copy:build']);
-  grunt.registerTask('require',        'copy require to build and resolve deps',                ['clean:require', 'copy:require', 'bower', 'clean:require_map', 'require_map:source']);
+  grunt.registerTask('require',        'copy require to build and resolve deps',                ['clean:require', 'copy:require', 'bower', 'clean:require_map']);
+  grunt.registerTask('build',          'make build using: [deps|source|require]',               ['require', 'require_map:source', 'source', 'deps']);
 
-  grunt.registerTask('build',          'make build using: [deps|source|require]',               ['require', 'source', 'deps']);
+  grunt.registerTask('server',         'start server',                                          ['bower_install', 'require', 'require_map:source', 'connect:source', 'watch:source']);
+  grunt.registerTask('test',           'make test',                                             ['copy:base', 'require', 'require_map:base', 'clean:base', 'karma:' + env]);
   grunt.registerTask('server_build',   'start server on build',                                 ['build', 'connect:build', 'watch:build']);
 
-  grunt.registerTask('server',         'start server',                                          ['bower_install', 'require', 'connect:source', 'watch:source']);
-
-  grunt.registerTask('release',        '',                                                      []);
-  grunt.registerTask('server_release', '',                                                      []);
-
-  grunt.registerTask('test',           'make test',                                             ['copy:base', 'require_map:base', 'clean:base', 'karma:' + env]);
-
-  grunt.registerTask('test_build',     'not implemented',                                       []);
-  grunt.registerTask('test_release',   'not implemented',                                       []);
+  grunt.registerTask('release',        '',                                                      ['build', 'requirejs']);
+  grunt.registerTask('server_release', '',                                                      ['release', 'connect:release']);
 
   grunt.registerTask('coverage',       'make coverage',                                         ['install', 'karma:coverage', 'connect:coverage']);
   grunt.registerTask('default',        '',                                                      ['test']);

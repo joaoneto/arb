@@ -9,4 +9,3 @@ build
 .idea
 *.log
 src/config/*
-src/scripts/src.map.js

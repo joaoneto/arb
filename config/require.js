@@ -1,7 +1,4 @@
 requirejs.config({
-  // Relative path (referring to the path ../index.html)
-  baseUrl: './scripts',
-
   // Dependencies orders
   shim: {
     jquery: {
@@ -25,7 +22,13 @@ requirejs.config({
       'src.map'
     ]
   },
-  // paths: {
-  //   'src.map': 'src.map'
-  // }
+  map: {
+    '*': {
+      'angular-ui-router': '../../bower_components/angular-ui-router/release/angular-ui-router'
+    },
+  },
+
+  paths: {
+    'src.map': '../config/src.map'
+  }
 })
