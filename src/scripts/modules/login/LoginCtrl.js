@@ -1,5 +1,5 @@
 angular
-  .module('arb.feature.login.LoginCtrl', [])
+  .module('arb.modules.login.LoginCtrl', [])
   .controller('LoginCtrl', ['$scope', '$state', 'Page', 'Auth',
     function ($scope, $state, Page, Auth) {
       console.log('LoginCtrl called');
@@ -30,8 +30,8 @@ angular
             }
           },
         })
-        .state('arb.logout', {
-          url: '/logout',
+        .state('logout', {
+          url: 'logout',
           views: { 
             'container' : { template: 'arb.login.container' }
           },

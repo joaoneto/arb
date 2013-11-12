@@ -1,5 +1,5 @@
 angular
-  .module('arb.common.controllers.AppCtrl', ['ui.router'])
+  .module('arb.common.controllers.HomeCtrl', ['ui.router', 'arb.modules.login.LoginCtrl'])
 
   .controller('AppCtrl', ['$scope', '$rootScope', '$state', 'Page', 'Auth', 'Notifications',
     function ($scope, $rootScope, $state, Page, Auth, Notifications) {
@@ -30,7 +30,6 @@ angular
       $stateProvider
         .state('arb', {
           url: '/',
-          controller: 'AppCtrl',
           resolve: resolverProvider.get(['currentUser']),
           views: {
             'header': {
@@ -38,6 +37,7 @@ angular
               controller: 'NavbarCtrl'
             },
             'container' : { 
+              templateUrl: 'partials/templates/container.html',
               controller: 'AppCtrl'
             },
             'footer':{

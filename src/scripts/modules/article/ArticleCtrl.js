@@ -1,4 +1,4 @@
-angular.module('arb.feature.article.ArticleCtrl', [])
+angular.module('arb.modules.article.ArticleCtrl', [])
   .controller('ArticleCtrl', 
     ['$scope', '$routeParams', '$location', 'Global', 'Articles', 
     function ($scope, $routeParams, $location, Global, Articles) {
