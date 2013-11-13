@@ -8,26 +8,35 @@
 
     <link href="../bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
     <style type="text/css">
-      body { padding-top: 50px; }bower_components
+      body { padding-top: 50px; }
     </style>
 
   </head>
   <body>
-    <div ui-view='header'></div>
-    <div class="container">
-      <h1>{{name}}</h1>
 
-      <pre>{{Notifications|json}}</pre>
-      <div class="container" style="margin-top:60px" ui-view="container"></div>
-
-    </div>
-    <div ui-view='footer'></div>
+    <div ui-view="root"></div>
+<!-- <div ui-view="header" class="container"></div>
+<div ui-view class="container"></div>
+<div ui-view="footer" class="container"></div>
+ -->
 
     <script data-main="main" src="../bower_components/requirejs/require.js"></script>
-    <!--[if lt IE 9]>
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
       <script src="../bower_components/html5shiv/dist/html5shiv.js"></script>
       <script src="../bower_components/respond/respond.min.js"></script>
     <![endif]-->
+    <pre>
+      <!-- Here's some values to keep an eye on in the sample in order to understand $state and $stateParams -->
+      $state = {{$state.current.name}}
+      $stateParams = {{$stateParams}}
+      $parent = {{$state.current.parent}}
+      $state full url = {{ $state.$current.url.source }}
+
+      $full = {{$state}}
+      <!-- $state.$current is not a public api, we are using it to
+           display the full url for learning purposes-->
+    </pre>
+
   </body>
 </html>
