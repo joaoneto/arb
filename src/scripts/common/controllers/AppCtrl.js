@@ -29,7 +29,7 @@ angular
           }]
         })
 
-//    $urlRouterProvider.otherwise('/');
+    $urlRouterProvider.otherwise('/');
 
     $stateProvider
       .state('root', {
