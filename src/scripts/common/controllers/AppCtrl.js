@@ -30,13 +30,10 @@ angular
 
     $stateProvider
       .state('root', {
-        views: {
-          root: {
-            templateUrl: 'templates/layouts/home.tpl.html',
-            controller: 'AppCtrl',
-            resolve: resolverProvider.get(['currentUser'])          
-          }
-        }
+        abstract: true,
+        templateUrl: 'templates/layouts/home.tpl.html',
+        // controller: 'AppCtrl',
+        // resolve: resolverProvider.get(['currentUser'])
       }
     )
   }])

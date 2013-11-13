@@ -13,8 +13,8 @@ angular
     function ($stateProvider, $urlRouterProvider, resolverProvider) {
 
       $stateProvider
-        .state('home', {
-          parent: 'root',
+        .state('root.home', {
+          // parent: 'root',
           url: '/',
           views: {
             'header': {
