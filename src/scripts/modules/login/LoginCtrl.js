@@ -10,7 +10,7 @@ angular
       $scope.login = function (success, error) {
         Auth.login($scope.data).then(function (data) {
           console.info('Logged in!');
-          $state.go('home');
+          //$state.go('home');
         }, function (resp) {
           console.error('Crap, login error!');
         });
@@ -21,40 +21,26 @@ angular
   .config(['$stateProvider', '$urlRouterProvider', 'resolverProvider', 
     function ($stateProvider, $urlRouterProvider, resolverProvider) {
       $stateProvider
-        .state('arb.login', {
+        .state('login', {
+          parent: 'home',
           url: 'login',
           views: { 
-            'container' : { 
-              templateUrl: 'scripts/feature/login/login.html',
+            'container@root.home' : { 
+              templateUrl: 'scripts/modules/login/login.html',
               controller: 'LoginCtrl'
-            }
+            },
           },
         })
-        .state('logout', {
-          url: 'logout',
-          views: { 
-            'container' : { template: 'arb.login.container' }
-          },
-          controller: ['$location', 'Auth', function ($location, Auth) {
-            Auth.logout().then(function (data) {
-              $location.path('/');
-            });
-          }],
-          templateUrl: 'scripts/feature/login/login.html'
-        })
-
-      // $routeProvider
-      //   .when('/login', {
-      //     controller: 'LoginCtrl',
-      //     templateUrl: 'scripts/feature/login/login.html',
-      //     resolve: resolverProvider.get(['currentUser'])
-      //   })
-      //   .when('/logout', {
-      //     controller: ['$location', 'Auth', function ($location, Auth) {
-      //       Auth.logout().then(function (data) {
-      //         $location.path('/');
-      //       });
-      //     }],
-      //     templateUrl: 'scripts/feature/login/login.html'
-      //   });
+        // .state('root.logout', {
+        //   url: 'logout',
+        //   views: { 
+        //     'container' : { template: 'arb.login.container' }
+        //   },
+        //   controller: ['$location', 'Auth', function ($location, Auth) {
+        //     Auth.logout().then(function (data) {
+        //       $location.path('/');
+        //     });
+        //   }],
+        //   templateUrl: 'scripts/feature/login/login.html'
+        // })
     }])
