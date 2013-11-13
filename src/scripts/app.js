@@ -2,9 +2,9 @@
 // console.log(deps)
 angular
   .module('arb', [
-    'arb.common', 
+    'arb.common',
     'arb.directives',
-    'arb.modules',
+    'arb.modules'
   ])
 
   .config(['$httpProvider', function ($httpProvider) {

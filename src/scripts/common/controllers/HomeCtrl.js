@@ -9,19 +9,19 @@ angular
     }
   ])
 
-  .config(['$stateProvider', '$urlRouterProvider', 'resolverProvider', 
+  .config(['$stateProvider', '$urlRouterProvider', 'resolverProvider',
     function ($stateProvider, $urlRouterProvider, resolverProvider) {
 
       $stateProvider
-        .state('root.home', {
-          // parent: 'root',
+        .state('home', {
+          parent: 'root',
           url: '/',
           views: {
             'header': {
               templateUrl: 'templates/partials/navbar.tpl.html',
               controller: 'NavbarCtrl'
             },
-            'container' : { 
+            'container' : {
               templateUrl: 'templates/partials/container.tpl.html',
               controller: 'HomeCtrl'
             },
@@ -30,11 +30,5 @@ angular
             }
           }
         })
-    // $routeProvider
-    //   .when('/', {
-    //     controller: 'AppCtrl',
-    //     templateUrl: 'partials/default.html',
-    //     resolve: resolverProvider.get(['currentUser'])
-    //   })
-    //   .otherwise({redirectTo: '/'});
-  }])
+    }
+  ]);
