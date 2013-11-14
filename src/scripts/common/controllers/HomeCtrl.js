@@ -1,5 +1,7 @@
 angular
-  .module('arb.common.controllers.HomeCtrl', ['ui.router'])
+  .module('arb.common.controllers.HomeCtrl', [
+    'arb.common.controllers.AfricanCtrl'
+  ])
 
   .controller('HomeCtrl', ['$scope', '$rootScope', '$state', 'Page', 'Auth', 'Notifications',
     function ($scope, $rootScope, $state, Page, Auth, Notifications) {
@@ -13,22 +15,28 @@ angular
     function ($stateProvider, $urlRouterProvider, resolverProvider) {
 
       $stateProvider
-        .state('home', {
-          parent: 'root',
+        .state('root.african.home', {
           url: '/',
           views: {
-            'header': {
+            'header@root.african': {
               templateUrl: 'templates/partials/navbar.tpl.html',
               controller: 'NavbarCtrl'
             },
-            'container' : {
+            'container@root.african' : {
               templateUrl: 'templates/partials/container.tpl.html',
               controller: 'HomeCtrl'
             },
-            'footer':{
+            'footer@root.african': {
               templateUrl: 'templates/partials/footer.tpl.html'
             }
+          },
+          resolve: {
+            banana3: ['$state', function($state) {
+              console.log($state)
+            }]
           }
         })
     }
   ]);
+
+

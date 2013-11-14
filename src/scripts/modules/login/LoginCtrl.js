@@ -10,7 +10,7 @@ angular
       $scope.login = function (success, error) {
         Auth.login($scope.data).then(function (data) {
           console.info('Logged in!');
-          $state.go('home');
+          $state.go('root.home');
         }, function (resp) {
           console.error('Crap, login error!');
         });
@@ -21,22 +21,21 @@ angular
   .config(['$stateProvider', '$urlRouterProvider', 'resolverProvider',
     function ($stateProvider, $urlRouterProvider, resolverProvider) {
       $stateProvider
-        .state('login', {
-          parent: 'home',
+        .state('root.african.home.login', {
           url: 'login',
           views: {
-            'container@root' : {
+            'container@african' : {
               templateUrl: 'scripts/modules/login/login.html',
               controller: 'LoginCtrl'
             },
           },
         })
         .state('logout', {
-          url: '/logout',
+          url: 'logout',
           onEnter: ['$state', 'Auth', function ($state, Auth) {
             console.log('logout!');
             Auth.logout().then(function (data) {
-              $state.go('home');
+              $state.go('root.home');
             });
           }]
         })
