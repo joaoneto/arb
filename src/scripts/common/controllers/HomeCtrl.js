@@ -1,6 +1,5 @@
 angular
   .module('arb.common.controllers.HomeCtrl', [
-    'arb.common.controllers.AfricanCtrl'
   ])
 
   .controller('HomeCtrl', ['$scope', '$rootScope', '$state', 'Page', 'Auth', 'Notifications',

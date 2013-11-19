@@ -1,36 +1,39 @@
 angular.module('arb.modules.article.ArticleCtrl', [
-  'arb.common.controllers.ArticleLayoutCtrl'
-  ])
-  .controller('ArticleCtrl', ['$scope', '$rootScope', '$state', 'Page', 'Auth', 'Notifications',
-    function ($scope, $rootScope, $state, Page, Auth, Notifications) {
-      console.log('ArticleCtrl called');
-      Page.set('title', 'Home');
-      $scope.name = 'I am ArticleCtrl';
-      //$state.go('root.home')
+  'arb.modules.article.ArticleLayout'
+])
 
-      // setInterval(function () {
-      //   Page.set('title', new Date().getTime())
-      //   Notifications.remove('bla', 0);
-      //   Notifications.add('bla', { test: new Date().getTime() });
-      //   $scope.$apply()
-      // }, 1000);
-    }]
-  )
-  .config(['$stateProvider', '$urlRouterProvider', 'resolverProvider',
-    function ($stateProvider, $urlRouterProvider, resolverProvider) {
+.controller('ArticleCtrl', ['$scope', '$rootScope', '$state', 'Page', 'Auth', 'Notifications',
+  function ($scope, $rootScope, $state, Page, Auth, Notifications) {
+    console.log('ArticleCtrl called');
+    Page.set('title', 'Home');
+    $scope.name = 'I am ArticleCtrl';
+    //$state.go('root.home')
 
-      $stateProvider
-        .state('root.african.home.articleLayout.article', {
-          url: 'article',
-          views: {
-            'center' : {
-              templateUrl: 'scripts/modules/article/article.tpl.html',
-              controller: 'ArticleCtrl'
-            }
+    // setInterval(function () {
+    //   Page.set('title', new Date().getTime())
+    //   Notifications.remove('bla', 0);
+    //   Notifications.add('bla', { test: new Date().getTime() });
+    //   $scope.$apply()
+    // }, 1000);
+  }
+])
+
+.config(['$stateProvider', '$urlRouterProvider', 'resolverProvider',
+  function ($stateProvider, $urlRouterProvider, resolverProvider) {
+
+    $stateProvider
+      .state('article', {
+        parent: 'articleLayout',
+        url: 'article',
+        views: {
+          'center' : {
+            templateUrl: 'scripts/modules/article/article.tpl.html',
+            controller: 'ArticleCtrl'
           }
-        })
-    }
-  ]);
+        }
+      })
+  }
+]);
 
 
 // angular.module('arb.modules.article.ArticleCtrl', [])

@@ -33,15 +33,14 @@ angular
 
     $stateProvider
       .state('root', {
-        //abstract: true,
-        resolve: {
-          banana: function() {
-            console.log('banana')
-          }
+        abstract: true,
+        views: {
+          'root': {
+            templateUrl: 'templates/layouts/default.tpl.html',
+            controller: 'AppCtrl',
+          },
         }
-        //resolve: resolverProvider.get(['currentUser'])
       })
-
     }]
   )
   .run(['$rootScope', '$state', '$stateParams',
