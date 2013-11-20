@@ -17,6 +17,6 @@ angular.module('arb', [
 }]);
 */
 
-angular.element(document).ready(function () {
-  angular.bootstrap(document, ['arb']);
-});
+// angular.element(document).ready(function () {
+//   angular.bootstrap(document, ['arb']);
+// });

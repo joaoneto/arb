@@ -54,12 +54,11 @@ module.exports = function (grunt) {
       build: {
         options: { livereload: true },
         files: ['<%= config.src_path %>/**/*'],
-        tasks: ['build']
+        //tasks: ['build']
       },
       source: {
         options: { livereload: true },
         files: ['<%= config.src_path %>/**/*'],
-        tasks: ['env-src']
       },
     },
 
@@ -115,7 +114,8 @@ module.exports = function (grunt) {
       coverage: ['<%= config.coverage_path %>'],
       require: ['<%= config.src_path %>/<%= config.require %>'],
       require_map: ['<%= config.src_path %>/<%= config.require_map %>'],
-      base: ['base']
+      base: ['base'],
+      ngconstant: ['<%= config.src_path %>/config/constants.js']
     },
 
     copy: {
@@ -146,6 +146,31 @@ module.exports = function (grunt) {
           { expand: true, cwd: 'bower_components/bootstrap', src: ['dist/**'], dest: '<%= config.components_path %>/bootstrap' },
         ]
       }
+    },
+
+    ngconstant: {
+      options: {
+        space: '\t'
+      },
+      unit: [
+        {
+          dest: '<%= config.src_path %>/config/constants.js',
+          name: 'arb.constants',
+          constants: {
+            URL_API: 'http://localhost\\:3000'
+          }
+        }
+      ],
+      continuous: [
+        {
+          dest: '<%= config.src_path %>/config/constants.js',
+          name:  'arb.constants',
+          constants: {
+            URL_API: process.env.URL_API,
+            package: grunt.file.readJSON('package.json')
+          }
+        }
+      ]
     },
 
     bower: {
@@ -222,18 +247,79 @@ module.exports = function (grunt) {
 
   });
 
-  grunt.registerTask('deps',           'install bower components and copy to build',            ['bower_install', 'clean:deps', 'copy:deps']);
-  grunt.registerTask('source',         'copy source to build',                                  ['clean:build', 'copy:build']);
-  grunt.registerTask('require',        'copy require to build and resolve deps',                ['clean:require', 'copy:require', 'bower', 'angular_map', 'clean:require_map']);
-  grunt.registerTask('build',          'make build using: [deps|source|require]',               ['require', 'angular_map', 'require_map:source', 'source', 'deps']);
+  // grunt.registerTask('deps',           'install bower components and copy to build',            ['bower_install', 'clean:deps', 'copy:deps']);
+  // grunt.registerTask('source',         'copy source to build',                                  ['clean:build', 'copy:build']);
+  // grunt.registerTask('require',        'copy require to build and resolve deps',                ['clean:require', 'copy:require', 'bower', 'angular_map', 'clean:require_map']);
+  // grunt.registerTask('build',          'make build using: [deps|source|require]',               ['require', 'angular_map', 'require_map:source', 'source', 'deps']);
 
-  grunt.registerTask('server',         'start server',                                          ['bower_install', 'require', 'angular_map', 'require_map:source', 'connect:source', 'watch:source']);
-  grunt.registerTask('test',           'make test',                                             ['copy:base', 'require', 'angular_map', 'require_map:base', 'clean:base', 'karma:' + env]);
-  grunt.registerTask('server_build',   'start server on build',                                 ['build', 'connect:build', 'watch:build']);
+  // grunt.registerTask('server',         'start server',                                          ['bower_install', 'require', 'angular_map', 'require_map:source', 'connect:source', 'watch:source']);
+  // grunt.registerTask('test',           'make test',                                             ['copy:base', 'require', 'angular_map', 'require_map:base', 'clean:base', 'karma:' + env]);
+  // grunt.registerTask('server_build',   'start server on build',                                 ['build', 'connect:build', 'watch:build']);
+
+  // grunt.registerTask('release',        '',                                                      ['build', 'requirejs']);
+  // grunt.registerTask('server_release', '',                                                      ['release', 'connect:release']);
+
+  // grunt.registerTask('coverage',       'make coverage',                                         ['install', 'karma:coverage', 'connect:coverage']);
+  // grunt.registerTask('default',        '',                                                      ['test']);
+
+
+  grunt.registerTask('deps', 'resolve deps', function(param) {
+    if (!param) {
+      grunt.log.error('task needs a param deps:[source||base]')
+    }
+    grunt.task.run([
+        'bower_install',
+        'clean:require',
+        'copy:require',
+        'bower',
+        'clean:require_map',
+        'clean:ngconstant',
+        'ngconstant:' + env,
+        'angular_map',
+        'require_map:' + param 
+      ]
+    );
+  });
+
+  grunt.registerTask(
+    'server', 'start server', [
+      'deps:source',
+      'connect:source',
+      'watch:source'
+    ]
+  );
+
+  grunt.registerTask(
+    'test', 'make test', [
+      'copy:base',
+      'deps:base',
+      'clean:base',
+      'karma:' + env
+    ]
+  );
+
+  grunt.registerTask(
+    'build', 'performe build', [
+      'deps:source',
+      'clean:build',
+      'copy:build',
+      'clean:deps',
+      'copy:deps'
+    ]
+  );
+
+  grunt.registerTask(
+    'server_build', 'start server on build', [
+      'build',
+      'connect:build',
+      'watch:build'
+    ]
+  );
 
   grunt.registerTask('release',        '',                                                      ['build', 'requirejs']);
   grunt.registerTask('server_release', '',                                                      ['release', 'connect:release']);
 
   grunt.registerTask('coverage',       'make coverage',                                         ['install', 'karma:coverage', 'connect:coverage']);
   grunt.registerTask('default',        '',                                                      ['test']);
+
 };

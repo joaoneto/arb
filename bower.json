@@ -19,15 +19,17 @@
     "public/assets"
   ],
   "dependencies": {
-    "jquery": "~2.0.3",
-    "requirejs": "~2.1.8",
     "angular": "~1.2.1",
-    "bootstrap": "3.0.0",
-    "html5shiv": "~3.7.0",
-    "respond": "~1.3.0",
     "angular-bootstrap": "~0.6.0",
     "angular-mocks": "~1.2.1",
     "angular-resource": "~1.2.1",
-    "angular-ui-router": "gabrielmancini/ui-router#0.3.0"
+    "angular-ui-router": "gabrielmancini/ui-router#0.3.0",
+    "bootstrap": "3.0.0",
+    "html5shiv": "~3.7.0",
+    "jquery": "~2.0.3",
+    "requirejs": "~2.1.8",
+    "respond": "~1.3.0",
+    "restangular": "~1.1.8",
+    "lodash": "~2.3.0"
   }
 }

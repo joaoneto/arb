@@ -7,12 +7,61 @@ angular.module('arb.modules.article.ArticleCtrl', [
     console.log('ArticleCtrl called');
     Page.set('title', 'Article');
     $scope.name = 'I am ArticleCtrl';
+
+    this.create = function() {
+      var article = new Articles({
+        title: this.title,
+        content: this.content
+      });
+
+      article.$save(function(response) {
+        $state.go('articles/' + response._id);
+      });
+
+      this.title = '';
+      this.content = '';
+    };
+
+    this.remove = function(article) {
+      article.$remove();
+
+      for (var i in $scope.articles) {
+        if ($scope.articles[i] == article) {
+          $scope.articles.splice(i, 1);
+        }
+      }
+    };
+
+    this.update = function() {
+      var article = $scope.article;
+      if (!article.updated) {
+        article.updated = [];
+      }
+      article.updated.push(new Date().getTime());
+
+      article.$update(function() {
+        $state.go('articles/' + article._id);
+      });
+    };
+
+    this.find = function() {
+      Articles.query(function(articles) {
+        $scope.articles = articles;
+      });
+    };
+
+    this.findOne = function() {
+      Articles.get({
+        articleId: $routeParams.articleId
+      }, function(article) {
+        $scope.article = article;
+      });
+    };
   }
 ])
 
 .config(['$stateProvider', '$urlRouterProvider', 'resolverProvider',
   function ($stateProvider, $urlRouterProvider, resolverProvider) {
-
     $stateProvider
       .state('article', {
         parent: 'articleLayout',
