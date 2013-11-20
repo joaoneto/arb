@@ -1,5 +1,6 @@
 angular
-  .module('arb.common.controllers.HomeCtrl', ['ui.router'])
+  .module('arb.common.controllers.HomeCtrl', [
+  ])
 
   .controller('HomeCtrl', ['$scope', '$rootScope', '$state', 'Page', 'Auth', 'Notifications',
     function ($scope, $rootScope, $state, Page, Auth, Notifications) {
@@ -25,10 +26,17 @@ angular
               templateUrl: 'templates/partials/container.tpl.html',
               controller: 'HomeCtrl'
             },
-            'footer':{
+            'footer': {
               templateUrl: 'templates/partials/footer.tpl.html'
             }
+          },
+          resolve: {
+            banana3: ['$state', function($state) {
+              console.log($state)
+            }]
           }
         })
     }
   ]);
+
+

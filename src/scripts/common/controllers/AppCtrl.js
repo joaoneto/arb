@@ -36,13 +36,11 @@ angular
         abstract: true,
         views: {
           'root': {
-            templateUrl: 'templates/layouts/home.tpl.html',
+            templateUrl: 'templates/layouts/default.tpl.html',
             controller: 'AppCtrl',
-          }
+          },
         }
-        //resolve: resolverProvider.get(['currentUser'])
       })
-
     }]
   )
   .run(['$rootScope', '$state', '$stateParams',
@@ -54,5 +52,27 @@ angular
       // to active whenever 'contacts.list' or one of its decendents is active.
       $rootScope.$state = $state;
       $rootScope.$stateParams = $stateParams;
+
+      $rootScope.$on('$stateChangeSuccess', function() {
+        console.log('$stateChangeSuccess', arguments);
+      })
+      $rootScope.$on('$stateChangeStart', function() {
+        console.log('$stateChangeStart', arguments);
+      })
+      $rootScope.$on('$stateNotFound', function() {
+        console.log('$stateNotFound', arguments);
+      })
+      $rootScope.$on('$stateChangeError', function() {
+        console.log('$stateChangeError', arguments);
+      })
+
+      $rootScope.$on('$viewContentLoading', function(event, viewConfig) {
+        console.log('$viewContentLoading', event, viewConfig);
+      })
+      $rootScope.$on('$viewContentLoaded', function(event, viewConfig) {
+        console.log('$viewContentLoaded', event.currentScope.$state.$current.navigable.views);
+        console.log('$viewContentLoaded', event.targetScope.$state.$current.navigable.views);
+      })
+
     }
   ]);

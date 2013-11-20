@@ -1,55 +1,93 @@
-angular.module('arb.modules.article.ArticleCtrl', [])
-  .controller('ArticleCtrl', 
-    ['$scope', '$routeParams', '$location', 'Global', 'Articles', 
-    function ($scope, $routeParams, $location, Global, Articles) {
-      $scope.global = Global;
+angular.module('arb.modules.article.ArticleCtrl', [
+  'arb.modules.article.ArticleLayout'
+])
 
-      $scope.create = function() {
-        var article = new Articles({
-          title: this.title,
-          content: this.content
-        });
-        article.$save(function(response) {
-          $location.path("articles/" + response._id);
-        });
+.controller('ArticleCtrl', ['$scope', '$rootScope', '$state', 'Page', 'Auth', 'Notifications',
+  function ($scope, $rootScope, $state, Page, Auth, Notifications) {
+    console.log('ArticleCtrl called');
+    Page.set('title', 'Home');
+    $scope.name = 'I am ArticleCtrl';
+    //$state.go('root.home')
 
-        this.title = "";
-        this.content = "";
-      };
+    // setInterval(function () {
+    //   Page.set('title', new Date().getTime())
+    //   Notifications.remove('bla', 0);
+    //   Notifications.add('bla', { test: new Date().getTime() });
+    //   $scope.$apply()
+    // }, 1000);
+  }
+])
 
-      $scope.remove = function(article) {
-        article.$remove();  
+.config(['$stateProvider', '$urlRouterProvider', 'resolverProvider',
+  function ($stateProvider, $urlRouterProvider, resolverProvider) {
 
-        for (var i in $scope.articles) {
-          if ($scope.articles[i] == article) {
-            $scope.articles.splice(i, 1);
+    $stateProvider
+      .state('article', {
+        parent: 'articleLayout',
+        url: 'article',
+        views: {
+          'center' : {
+            templateUrl: 'scripts/modules/article/article.tpl.html',
+            controller: 'ArticleCtrl'
           }
         }
-      };
+      })
+  }
+]);
 
-      $scope.update = function() {
-        var article = $scope.article;
-        if (!article.updated) {
-          article.updated = [];
-        }
-        article.updated.push(new Date().getTime());
 
-        article.$update(function() {
-          $location.path('articles/' + article._id);
-        });
-      };
+// angular.module('arb.modules.article.ArticleCtrl', [])
+//   .controller('ArticleCtrl',
+//     ['$scope', '$routeParams', '$location', 'Global', 'Articles',
+//     function ($scope, $routeParams, $location, Global, Articles) {
+//       $scope.global = Global;
 
-      $scope.find = function() {
-        Articles.query(function(articles) {
-          $scope.articles = articles;
-        });
-      };
+//       $scope.create = function() {
+//         var article = new Articles({
+//           title: this.title,
+//           content: this.content
+//         });
+//         article.$save(function(response) {
+//           $location.path("articles/" + response._id);
+//         });
 
-      $scope.findOne = function() {
-        Articles.get({
-          articleId: $routeParams.articleId
-        }, function(article) {
-          $scope.article = article;
-        });
-      };
-    }]);
+//         this.title = "";
+//         this.content = "";
+//       };
+
+//       $scope.remove = function(article) {
+//         article.$remove();
+
+//         for (var i in $scope.articles) {
+//           if ($scope.articles[i] == article) {
+//             $scope.articles.splice(i, 1);
+//           }
+//         }
+//       };
+
+//       $scope.update = function() {
+//         var article = $scope.article;
+//         if (!article.updated) {
+//           article.updated = [];
+//         }
+//         article.updated.push(new Date().getTime());
+
+//         article.$update(function() {
+//           $location.path('articles/' + article._id);
+//         });
+//       };
+
+//       $scope.find = function() {
+//         Articles.query(function(articles) {
+//           $scope.articles = articles;
+//         });
+//       };
+
+//       $scope.findOne = function() {
+//         Articles.get({
+//           articleId: $routeParams.articleId
+//         }, function(article) {
+//           $scope.article = article;
+//         });
+//       };
+//     }])
