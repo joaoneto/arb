@@ -59,7 +59,6 @@ module.exports = function (grunt) {
       source: {
         options: { livereload: true },
         files: ['<%= config.src_path %>/**/*'],
-        //tasks: ['deps:source']
       },
     },
 
@@ -115,7 +114,8 @@ module.exports = function (grunt) {
       coverage: ['<%= config.coverage_path %>'],
       require: ['<%= config.src_path %>/<%= config.require %>'],
       require_map: ['<%= config.src_path %>/<%= config.require_map %>'],
-      base: ['base']
+      base: ['base'],
+      ngconstant: ['<%= config.src_path %>/config/constants.js']
     },
 
     copy: {
@@ -146,6 +146,31 @@ module.exports = function (grunt) {
           { expand: true, cwd: 'bower_components/bootstrap', src: ['dist/**'], dest: '<%= config.components_path %>/bootstrap' },
         ]
       }
+    },
+
+    ngconstant: {
+      options: {
+        space: '\t'
+      },
+      unit: [
+        {
+          dest: '<%= config.src_path %>/config/constants.js',
+          name: 'arb.constants',
+          constants: {
+            URL_API: 'http://localhost\\:3000'
+          }
+        }
+      ],
+      continuous: [
+        {
+          dest: '<%= config.src_path %>/config/constants.js',
+          name:  'arb.constants',
+          constants: {
+            URL_API: process.env.URL_API,
+            package: grunt.file.readJSON('package.json')
+          }
+        }
+      ]
     },
 
     bower: {
@@ -248,6 +273,8 @@ module.exports = function (grunt) {
         'copy:require',
         'bower',
         'clean:require_map',
+        'clean:ngconstant',
+        'ngconstant:' + env,
         'angular_map',
         'require_map:' + param 
       ]

@@ -6,6 +6,7 @@ angular.module('arb.common', [
   "arb.common.sessionStorage",
   "arb.common.controllers",
   "arb.common.layout",
+  "arb.common.resources",
   "arb.common.security",
   "arb.common.services"
 ]);
