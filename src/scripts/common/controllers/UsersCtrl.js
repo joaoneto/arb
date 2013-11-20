@@ -5,10 +5,10 @@ angular
     $scope.name = 'I am UsersCtrl';
   }])
 
-  .config(['$routeProvider', function ($routeProvider) {
-    $routeProvider
-      .when('/profile', {
-        controller: 'UsersCtrl',
-        templateUrl: 'partials/profile.html'
-      });
+  .config(['$stateProvider', function ($stateProvider) {
+    // $stateProvider
+    //   .when('/profile', {
+    //     controller: 'UsersCtrl',
+    //     templateUrl: 'partials/profile.html'
+    //   });
   }])

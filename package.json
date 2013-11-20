@@ -39,6 +39,7 @@
     "grunt-bower-just-install": "0.0.1",
     "grunt-require-map": "0.0.3",
     "grunt-contrib-requirejs": "~0.4.1",
-    "grunt-angular-map": "0.0.1"
+    "grunt-angular-map": "0.0.1",
+    "grunt-ng-constant": "~0.4.5"
   }
 }
