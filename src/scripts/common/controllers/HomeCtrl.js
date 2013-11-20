@@ -14,18 +14,19 @@ angular
     function ($stateProvider, $urlRouterProvider, resolverProvider) {
 
       $stateProvider
-        .state('root.african.home', {
+        .state('home', {
+          parent: 'root',
           url: '/',
           views: {
-            'header@root.african': {
+            'header': {
               templateUrl: 'templates/partials/navbar.tpl.html',
               controller: 'NavbarCtrl'
             },
-            'container@root.african' : {
+            'container' : {
               templateUrl: 'templates/partials/container.tpl.html',
               controller: 'HomeCtrl'
             },
-            'footer@root.african': {
+            'footer': {
               templateUrl: 'templates/partials/footer.tpl.html'
             }
           },

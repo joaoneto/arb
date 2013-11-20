@@ -7,11 +7,11 @@ angular.module('arb.modules.article.ArticleLayout', [
 
       $stateProvider
         .state('articleLayout', {
-          parent: 'root',
+          parent: 'home',
           abstract:true,
           views: {
-            'container' : {
-              templateUrl: 'modules/article/article.layout.tpl.html'
+            'container@root' : {
+              templateUrl: 'scripts/modules/article/article.layout.tpl.html'
             }
           }
         })
