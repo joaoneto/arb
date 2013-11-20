@@ -4,8 +4,6 @@ angular.module('arb.common', [
   "arb.common.confProvider",
   "arb.common.resolverProvider",
   "arb.common.sessionStorage",
-  "arb.common.controllers",
-  "arb.common.layout",
-  "arb.common.security",
-  "arb.common.services"
+  "arb.common.app",
+  "arb.common.security"
 ]);

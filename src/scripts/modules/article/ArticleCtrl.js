@@ -5,16 +5,8 @@ angular.module('arb.modules.article.ArticleCtrl', [
 .controller('ArticleCtrl', ['$scope', '$rootScope', '$state', 'Page', 'Auth', 'Notifications',
   function ($scope, $rootScope, $state, Page, Auth, Notifications) {
     console.log('ArticleCtrl called');
-    Page.set('title', 'Home');
+    Page.set('title', 'Article');
     $scope.name = 'I am ArticleCtrl';
-    //$state.go('root.home')
-
-    // setInterval(function () {
-    //   Page.set('title', new Date().getTime())
-    //   Notifications.remove('bla', 0);
-    //   Notifications.add('bla', { test: new Date().getTime() });
-    //   $scope.$apply()
-    // }, 1000);
   }
 ])
 
@@ -28,7 +20,7 @@ angular.module('arb.modules.article.ArticleCtrl', [
         views: {
           'center' : {
             templateUrl: 'scripts/modules/article/article.tpl.html',
-            controller: 'ArticleCtrl'
+            controller: 'ArticleCtrl as article'
           }
         }
       })

@@ -1,23 +1,27 @@
-angular.module('arb.common.apiMocks', [
-  'ngMockE2E'
-  ])
-  .run(['$httpBackend', '$log', '$timeout', 'conf', 'sessionStorage', function ($httpBackend, $log, $timeout, conf, sessionStorage) {
+angular.module('arb.common.apiMocks', ['ngMockE2E'])
+
+.run(['$httpBackend', '$timeout', '$log', '$timeout', 'conf', 'sessionStorage',
+  function ($httpBackend, $timeout, $log, $timeout, conf, sessionStorage) {
     var baseUrl = conf.get('baseUrl');
     var authorized = sessionStorage.get('authenticated');
     var userData = { id: '1234567890', username: 'user', role: ['moderator'] };
 
 
-    $httpBackend.when('GET', baseUrl + '/session').respond(function (method, url, data) {
+    $httpBackend.when('GET', baseUrl + '/session')
+    .respond(function (method, url, data) {
       $log.info(method, baseUrl + '/session');
 
       if (authorized) {
-        return [200, userData];
+        $timeout(function () {
+          return [200, userData];
+        }, 1)
       } else {
-        return [401, { error: 'You are not logged in.' }];
+        return [406, { error: 'You are not logged in.' }];
       }
     });
 
-    $httpBackend.when('POST', baseUrl + '/session').respond(function (method, url, data) {
+    $httpBackend.when('POST', baseUrl + '/session')
+    .respond(function (method, url, data) {
       $log.info(method, baseUrl + '/session');
 
       if (authorized) {
@@ -28,7 +32,8 @@ angular.module('arb.common.apiMocks', [
       }
     });
 
-    $httpBackend.when('DELETE', baseUrl + '/session').respond(function (method, url, data) {
+    $httpBackend.when('DELETE', baseUrl + '/session')
+    .respond(function (method, url, data) {
       authorized = false;
       $log.info(method, baseUrl + '/session');
 
@@ -41,4 +46,5 @@ angular.module('arb.common.apiMocks', [
 
     // otherwise
     $httpBackend.when('GET', /.*/).passThrough();
-  }]);
+  }
+]);

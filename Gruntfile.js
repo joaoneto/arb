@@ -30,7 +30,7 @@ module.exports = function (grunt) {
       },
       unit: {
         autoWatch: true,
-        singleRun: false,   
+        singleRun: false,
       },
       continuous: {
         autoWatch: false,
@@ -126,7 +126,7 @@ module.exports = function (grunt) {
         files: [{ src: '<%= config.require %>', dest: '<%= config.src_path %>', cwd: './', expand: true }]
       },
       base: {
-        files: [{ src: '<%= config.src_path %>/**', dest: 'base', cwd: './', expand: true }]        
+        files: [{ src: '<%= config.src_path %>/**', dest: 'base', cwd: './', expand: true }]
       },
       cov: {},
       deps: {
@@ -182,7 +182,7 @@ module.exports = function (grunt) {
           src: ['scripts/**/*.js', '!scripts/app.js', '!scripts/**/*.spec.js'],
           cwd: '<%= config.src_path %>'
         }]
-      }, 
+      },
       base: {
         options: {
           fileName: '<%= config.src_path %>/<%= config.require_map %>'
@@ -191,7 +191,7 @@ module.exports = function (grunt) {
           src: ['base/src/scripts/**/*.js', '!base/src/scripts/app.js', '!base/src/scripts/**/*.spec.js', '!base/src/scripts/src.map.js'],
           cwd: '.'
         }]
-      }    
+      }
     },
 
     requirejs: {
@@ -214,7 +214,7 @@ module.exports = function (grunt) {
             'angular-mocks': 'empty:',
             'angular-resource': 'empty:',
             'angular-bootstrap': 'empty:',
-            'angular-ui-router': 'empty:',    
+            'angular-ui-router': 'empty:',
           },
         }
       }
