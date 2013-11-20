@@ -7,6 +7,8 @@ angular.module('arb.modules.article.ArticleCtrl', [
     console.log('ArticleCtrl called');
     Page.set('title', 'Home');
     $scope.name = 'I am ArticleCtrl';
+
+    this.foo = 'lalala';
     //$state.go('root.home')
 
     // setInterval(function () {
@@ -28,7 +30,7 @@ angular.module('arb.modules.article.ArticleCtrl', [
         views: {
           'center' : {
             templateUrl: 'scripts/modules/article/article.tpl.html',
-            controller: 'ArticleCtrl'
+            controller: 'ArticleCtrl as article'
           }
         }
       })
