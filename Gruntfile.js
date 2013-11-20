@@ -54,12 +54,12 @@ module.exports = function (grunt) {
       build: {
         options: { livereload: true },
         files: ['<%= config.src_path %>/**/*'],
-        tasks: ['build']
+        //tasks: ['build']
       },
       source: {
         options: { livereload: true },
         files: ['<%= config.src_path %>/**/*'],
-        tasks: ['env-src']
+        //tasks: ['deps:source']
       },
     },
 
@@ -238,23 +238,25 @@ module.exports = function (grunt) {
   // grunt.registerTask('default',        '',                                                      ['test']);
 
 
-
- grunt.registerTask(
-    'deps', 'resolve deps', [
-      'bower_install',
-      'clean:require',
-      'copy:require',
-      'bower',
-      'clean:require_map',
-      'angular_map',
-      'require_map'
-    ]
-  );
+  grunt.registerTask('deps', 'resolve deps', function(param) {
+    if (!param) {
+      grunt.log.error('task needs a param deps:[source||base]')
+    }
+    grunt.task.run([
+        'bower_install',
+        'clean:require',
+        'copy:require',
+        'bower',
+        'clean:require_map',
+        'angular_map',
+        'require_map:' + param 
+      ]
+    );
+  });
 
   grunt.registerTask(
     'server', 'start server', [
-      'deps',
-      'require_map:source',
+      'deps:source',
       'connect:source',
       'watch:source'
     ]
@@ -263,21 +265,25 @@ module.exports = function (grunt) {
   grunt.registerTask(
     'test', 'make test', [
       'copy:base',
-      'deps',
-      'require_map:base',
+      'deps:base',
       'clean:base',
       'karma:' + env
     ]
   );
 
   grunt.registerTask(
-    'server_build', 'start server on build', [
-      'deps',
-      'require_map:source',
+    'build', 'performe build', [
+      'deps:source',
       'clean:build',
       'copy:build',
       'clean:deps',
-      'copy:deps',
+      'copy:deps'
+    ]
+  );
+
+  grunt.registerTask(
+    'server_build', 'start server on build', [
+      'build',
       'connect:build',
       'watch:build'
     ]
