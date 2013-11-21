@@ -22,8 +22,8 @@ angular.module('arb.modules.article.ArticleCtrl', [
         console.log('Crap, error creating article!', err);
       });
 
-      $scope.title = '';
-      $scope.content = '';
+      // $scope.title = '';
+      // $scope.content = '';
     };
 
     this.remove = function (article) {

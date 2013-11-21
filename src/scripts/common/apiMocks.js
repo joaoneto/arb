@@ -39,8 +39,10 @@ angular.module('arb.common.apiMocks', ['ngMockE2E'])
 
     $httpBackend.when('POST', baseUrl + '/article')
       .respond(function (method, url, data) {
+        data = JSON.parse(data);
         var articles = JSON.parse(sessionStorage.get('articles')) || [];
         $log.info(method, baseUrl + '/article');
+        console.log(arguments);
 
         // if (!authorized) {
         //   return [401, { error: 'You are not logged in.' }];
@@ -55,7 +57,6 @@ angular.module('arb.common.apiMocks', ['ngMockE2E'])
 
           sessionStorage.set('articles', JSON.stringify(articles));
           return [200, data2];
-        // }
       });
 
     // $httpBackend.whenPOST(baseUrl + 'data/protected').respond(function (method, url, data) {
