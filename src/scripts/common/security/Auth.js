@@ -1,9 +1,9 @@
 angular
   .module('arb.common.security.Auth', [])
 
-  .factory('Auth', ['$rootScope', '$http', '$q', 'conf', 'sessionStorage',
-    function ($rootScope, $http, $q, conf, sessionStorage) {
-      var uri = conf.get('baseUrl') + '/session';
+  .factory('Auth', ['$rootScope', '$q', 'ArbRest', 'sessionStorage',
+    function ($rootScope, $q, ArbRest, sessionStorage) {
+      var Session = ArbRest.all('session');
 
       function Auth() {
         this.user = null;
@@ -19,9 +19,8 @@ angular
         var defered = $q.defer();
 
         if (!self.user && self.isLoggedIn()) {
-          self.user = $http.get(uri, { withCredentials: true })
-            .then(function (res) {
-              var user = res.data;
+          self.user = Session.get('')
+            .then(function (user) {
               self.user = user;
               $rootScope.$broadcast('auth.currentuser', user);
               defered.resolve(user);
@@ -39,10 +38,9 @@ angular
 
       Auth.prototype.login = function (data) {
         var self = this;
-        var req = $http.post(uri, data, { withCredentials: true });
+        var req = Session.post({ email: data.email, password: data.password });
 
-        req.then(function (res) {
-          var user = res.data;
+        req.then(function (user) {
           sessionStorage.set('authenticated', true);
           $rootScope.$broadcast('auth.authenticated', user);
           self.user = user;
@@ -57,7 +55,7 @@ angular
       Auth.prototype.logout = function (data) {
         this._destroy();
 
-        return $http.delete(uri, { withCredentials: true });
+        return Session.customDELETE();
       };
 
       Auth.prototype.isLoggedIn = function () {

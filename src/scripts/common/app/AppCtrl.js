@@ -34,15 +34,21 @@ angular.module('arb.common.app.AppCtrl', [
         'root': {
           templateUrl: 'scripts/common/app/layouts/default.tpl.html',
           controller: 'AppCtrl',
-        },
+          resolve: {
+            currentUser: ['Auth', function (Auth) {
+              return Auth.currentUser();
+            }]
+          }
+        }
       }
     })
   }
 ])
 
+// debug
 .run(['$rootScope', '$state', '$stateParams',
   function ($rootScope, $state, $stateParams) {
     $rootScope.$state = $state;
     $rootScope.$stateParams = $stateParams;
   }
-]);
+])

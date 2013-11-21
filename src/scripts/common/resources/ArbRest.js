@@ -6,12 +6,11 @@ angular.module('arb.common.resources.ArbRest', [
 angular.module('arb.common.resources.ArbRest')
   .factory('ArbRest', [
     'Restangular',
-    'URL_API',
-    function (Restangular, URL_API) {
-
+    'conf',
+    function (Restangular, conf) {
       var ArbRest = Restangular.withConfig(function (RestangularConfigurer) {
-        RestangularConfigurer.setRequestSuffix('.json');
-        RestangularConfigurer.setBaseUrl(URL_API + '/v1');
+        // RestangularConfigurer.setRequestSuffix('.json');
+        RestangularConfigurer.setBaseUrl(conf.getApiUrl());
       });
 
       return ArbRest;

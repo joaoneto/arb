@@ -150,27 +150,27 @@ module.exports = function (grunt) {
 
     ngconstant: {
       options: {
-        space: '\t'
+        space: '  '
       },
-      unit: [
-        {
-          dest: '<%= config.src_path %>/config/constants.js',
-          name: 'arb.constants',
-          constants: {
-            URL_API: 'http://localhost\\:3000'
-          }
+      unit: [{
+        dest: '<%= config.src_path %>/config/constants.js',
+        name: 'arb.constants',
+        constants: {
+          API_URL: 'http://localhost',
+          API_PORT: '3000',
+          API_VERSION: 'v1'
         }
-      ],
-      continuous: [
-        {
-          dest: '<%= config.src_path %>/config/constants.js',
-          name:  'arb.constants',
-          constants: {
-            URL_API: process.env.URL_API,
-            package: grunt.file.readJSON('package.json')
-          }
+      }],
+      continuous: [{
+        dest: '<%= config.src_path %>/config/constants.js',
+        name:  'arb.constants',
+        constants: {
+          API_URL: process.env.API_URL,
+          API_PORT: process.env.API_PORT,
+          API_VERSION: 'v1',
+          package: grunt.file.readJSON('package.json')
         }
-      ]
+      }]
     },
 
     bower: {
@@ -276,7 +276,7 @@ module.exports = function (grunt) {
         'clean:ngconstant',
         'ngconstant:' + env,
         'angular_map',
-        'require_map:' + param 
+        'require_map:' + param
       ]
     );
   });
