@@ -2,27 +2,31 @@ angular.module('arb.modules.article.ArticleCtrl', [
   'arb.modules.article.ArticleLayout'
 ])
 
-.controller('ArticleCtrl', ['$scope', '$rootScope', '$state', 'Page', 'Auth', 'Notifications',
-  function ($scope, $rootScope, $state, Page, Auth, Notifications) {
+.controller('ArticleCtrl', ['$scope', '$rootScope', '$state', 'Page', 'Auth', 'Notifications', 'ArbRest',
+  function ($scope, $rootScope, $state, Page, Auth, Notifications, ArbRest) {
     console.log('ArticleCtrl called');
+
+    var Articles = ArbRest.all('article');
     Page.set('title', 'Article');
-    $scope.name = 'I am ArticleCtrl';
 
-    this.create = function() {
-      var article = new Articles({
-        title: this.title,
-        content: this.content
+    this.create = function () {
+      var article = Articles.post({
+        title: $scope.title,
+        content: $scope.content
       });
 
-      article.$save(function(response) {
-        $state.go('articles/' + response._id);
+      article.then(function (user) {
+        console.log(user)
+        // $state.go('articles/' + user._id);
+      }, function (err) {
+        console.log('Crap, error creating article!', err);
       });
 
-      this.title = '';
-      this.content = '';
+      $scope.title = '';
+      $scope.content = '';
     };
 
-    this.remove = function(article) {
+    this.remove = function (article) {
       article.$remove();
 
       for (var i in $scope.articles) {
@@ -32,25 +36,25 @@ angular.module('arb.modules.article.ArticleCtrl', [
       }
     };
 
-    this.update = function() {
+    this.update = function () {
       var article = $scope.article;
       if (!article.updated) {
         article.updated = [];
       }
       article.updated.push(new Date().getTime());
 
-      article.$update(function() {
+      article.$update(function () {
         $state.go('articles/' + article._id);
       });
     };
 
-    this.find = function() {
+    this.find = function () {
       Articles.query(function(articles) {
         $scope.articles = articles;
       });
     };
 
-    this.findOne = function() {
+    this.findOne = function () {
       Articles.get({
         articleId: $routeParams.articleId
       }, function(article) {
