@@ -6,6 +6,14 @@ angular.module('arb.common.apiMocks', ['ngMockE2E'])
     var authorized = sessionStorage.get('authenticated');
     var userData = { id: '1234567890', username: 'user', role: ['moderator'] };
 
+    function getIdFromResource(resource, url) {
+      return url.split('/').pop().replace(resource, '');
+    }
+
+    /**
+     * Session API
+     */
+
     $httpBackend.when('GET', baseUrl + '/session')
       .respond(function (method, url, data) {
         $log.info(method, baseUrl + '/session');
@@ -37,38 +45,49 @@ angular.module('arb.common.apiMocks', ['ngMockE2E'])
         return [200];
       });
 
-    $httpBackend.when('GET', baseUrl + '/article')
-      .respond(function (method, url, data) {
+    /**
+     * Article API
+     */
+
+    // /article
+    // /article/
+    // /article/[a-z0-9]
+    $httpBackend.when('GET', new RegExp(baseUrl + '/article(\/\w+)?'))
+      .respond(function (method, url, data, headers) {
+        var id = getIdFromResource('article', url);
         var articles = JSON.parse(sessionStorage.get('articles')) || [];
+        var result = id ? articles[id-1] : articles;
+
         $log.info(method, baseUrl + '/article');
 
-        // if (!authorized) {
-        //   return [401, { error: 'You are not logged in.' }];
-        // } else {
-        return [200, articles];
+        if (!authorized) {
+          return [401, { error: 'You are not logged in.' }];
+        } else {
+          return [200, result];
+        }
       });
 
     $httpBackend.when('POST', baseUrl + '/article')
       .respond(function (method, url, data) {
-        data = JSON.parse(data);
         var articles = JSON.parse(sessionStorage.get('articles')) || [];
+        var parsedData = JSON.parse(data);
+
+        var newArticle = {
+          _id: articles.length + 1,
+          title: parsedData.title,
+          content: parsedData.content,
+          created: new Date()
+        };
+
         $log.info(method, baseUrl + '/article');
-        console.log(arguments);
 
-        // if (!authorized) {
-        //   return [401, { error: 'You are not logged in.' }];
-        // } else {
-          var data2 = {
-            _id: articles.length + 1,
-            title: data.title,
-            content: data.content,
-            created: new Date()
-          };
-
-          articles.push(data2);
-
+        if (!authorized) {
+          return [401, { error: 'You are not logged in.' }];
+        } else {
+          articles.push(newArticle);
           sessionStorage.set('articles', JSON.stringify(articles));
-          return [200, data2];
+          return [200, newArticle];
+        }
       });
 
     // $httpBackend.whenPOST(baseUrl + 'data/protected').respond(function (method, url, data) {
@@ -77,5 +96,6 @@ angular.module('arb.common.apiMocks', ['ngMockE2E'])
 
     // otherwise
     $httpBackend.when('GET', /.*/).passThrough();
+    $httpBackend.when('POST', /.*/).passThrough();
   }
 ]);
