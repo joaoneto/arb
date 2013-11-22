@@ -12,13 +12,11 @@ requirejs.config({
       deps: ['jquery']
     },
     'angular-mocks': ['angular'],
-    'angular-resource': ['angular'],
     'angular-bootstrap': ['angular'],
     'angular-ui-router': ['angular'],
     'restangular': ['angular', 'lodash'],
     'src.map': [
       'angular-mocks',
-      'angular-resource',
       'angular-ui-router',
       'angular-bootstrap',
       'restangular'

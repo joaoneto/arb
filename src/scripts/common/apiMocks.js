@@ -37,10 +37,23 @@ angular.module('arb.common.apiMocks', ['ngMockE2E'])
         return [200];
       });
 
-    $httpBackend.when('POST', baseUrl + '/article')
+    $httpBackend.when('GET', baseUrl + '/article')
       .respond(function (method, url, data) {
         var articles = JSON.parse(sessionStorage.get('articles')) || [];
         $log.info(method, baseUrl + '/article');
+
+        // if (!authorized) {
+        //   return [401, { error: 'You are not logged in.' }];
+        // } else {
+        return [200, articles];
+      });
+
+    $httpBackend.when('POST', baseUrl + '/article')
+      .respond(function (method, url, data) {
+        data = JSON.parse(data);
+        var articles = JSON.parse(sessionStorage.get('articles')) || [];
+        $log.info(method, baseUrl + '/article');
+        console.log(arguments);
 
         // if (!authorized) {
         //   return [401, { error: 'You are not logged in.' }];
@@ -49,13 +62,13 @@ angular.module('arb.common.apiMocks', ['ngMockE2E'])
             _id: articles.length + 1,
             title: data.title,
             content: data.content,
+            created: new Date()
           };
 
           articles.push(data2);
 
           sessionStorage.set('articles', JSON.stringify(articles));
           return [200, data2];
-        // }
       });
 
     // $httpBackend.whenPOST(baseUrl + 'data/protected').respond(function (method, url, data) {
