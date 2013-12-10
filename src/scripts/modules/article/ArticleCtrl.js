@@ -16,9 +16,10 @@ angular.module('arb.modules.article.ArticleCtrl', [
       });
 
       article.then(function (article) {
-        console.log(article)
+        console.log('article ok ', article)
         $state.go('article');
       }, function (err) {
+        console.log('fuck', err.status)
         console.log('Crap, error creating article!', err);
       });
     };
