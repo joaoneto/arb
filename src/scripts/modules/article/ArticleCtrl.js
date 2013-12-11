@@ -4,22 +4,23 @@ angular.module('arb.modules.article.ArticleCtrl', [
 
 .controller('ArticleCtrl', ['$scope', '$rootScope', '$state', '$stateParams', 'Page', 'Auth', 'Notifications', 'ArbRest',
   function ($scope, $rootScope, $state, $stateParams, Page, Auth, Notifications, ArbRest) {
+    
+    debugger;
     console.log('ArticleCtrl called');
 
     var Articles = ArbRest.all('article');
     Page.set('title', 'Article');
 
     this.create = function () {
+      console.log('create')
       var article = Articles.post({
         title: $scope.title,
         content: $scope.content
       });
-
       article.then(function (article) {
         console.log('article ok ', article)
-        $state.go('article');
+        // $state.go('article');
       }, function (err) {
-        console.log('fuck', err.status)
         console.log('Crap, error creating article!', err);
       });
     };
