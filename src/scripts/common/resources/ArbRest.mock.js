@@ -1,4 +1,4 @@
-angular.module('arb.common.apiMocks', ['ngMockE2E'])
+angular.module('arb.common.resources.ArbRest.mock', ['ngMockE2E'])
 
 .run(['$httpBackend', '$timeout', '$log', 'conf', 'sessionStorage',
   function ($httpBackend, $timeout, $log, conf, sessionStorage) {
