@@ -23,7 +23,7 @@ describe('<Unit Test>', function() {
         inject(function ($controller, _$httpBackend_, $rootScope, _ArbRest_, $state, conf) {
           $httpBackend = _$httpBackend_;
           var baseUrl = conf.getApiUrl();
-          $httpBackend.expectPOST( baseUrl + '/session')
+          $httpBackend.expectPOST( baseUrl + '/article')
             .respond('[{"name":"tester"},{"name":"tester2"}]');
           ArbRest = _ArbRest_;
           $scope = $rootScope.$new();
