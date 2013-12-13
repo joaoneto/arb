@@ -7,7 +7,12 @@ module.exports = function (config) {
       'chai',
       'chai-as-promised',
       'sinon-chai',
+      'ng-scenario'
     ],
+
+    // preprocessors: {
+    //   '**/*.html': ['ng-html2js']
+    // },
 
     files: [
       {pattern: 'bower_components/**/*.js',                    included: false},
@@ -52,7 +57,7 @@ module.exports = function (config) {
     // - Opera
     // - Safari
     // - PhantomJS
-    browsers: ['PhantomJS'],
+    browsers: ['Chrome'],
 
     // Continuous Integration mode
     // if true, it capture browsers, run tests and exit

@@ -5,7 +5,6 @@ angular.module('arb.modules.article.ArticleCtrl', [
 .controller('ArticleCtrl', ['$scope', '$rootScope', '$state', '$stateParams', 'Page', 'Auth', 'Notifications', 'ArbRest',
   function ($scope, $rootScope, $state, $stateParams, Page, Auth, Notifications, ArbRest) {
     
-    debugger;
     console.log('ArticleCtrl called');
 
     var Articles = ArbRest.all('article');
@@ -13,11 +12,12 @@ angular.module('arb.modules.article.ArticleCtrl', [
 
     this.create = function () {
       console.log('create')
-      var article = Articles.post({
+      Articles.post({
         title: $scope.title,
         content: $scope.content
-      });
-      article.then(function (article) {
+      })
+      .then(function (article) {
+        debugger;
         console.log('article ok ', article)
         // $state.go('article');
       }, function (err) {
