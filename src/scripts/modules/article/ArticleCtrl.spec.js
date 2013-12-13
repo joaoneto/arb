@@ -1,96 +1,80 @@
 //The tests
 describe('<Unit Test>', function() {
   describe('Article:', function() {
-    var createController,
-      ArticleCtrl,
-      $httpBackend,
-      $scope,
-      $rootScope,
-      $state,
-      $stateParams,
-      Page,
-      Auth,
-      Notifications,
-      ArbRest,
-      $controller;
+
+    // var ArticleCtrl,
+    //   $scope,
+    //   $rootScope,
+    //   $controller;
 
     beforeEach(module('arb'));
 
-    // Mock states
-    beforeEach(module(function ($stateProvider) {
-//      $stateProvider.state('login', {}).state('logout', {})
-      $stateProvider
-        .state('article', {})
-        .state('article.create', {});
-    }));
+    // beforeEach(inject(function($injector) {
 
-    // beforeEach(module('$stateProvider', function ($stateProvider) { 
-    //   console.log('------------------------>')      
-    //   var $stateProvider = $injector.get('$stateProvider');
-    //   $stateProvider
-    //     .state('article', {})
-    //     .state('article.create', {}); 
+    //   // $rootScope = $injector.get('$rootScope');      
+    //   // $scope = $rootScope.$new();
+    //   // $controller = $injector.get('$controller');
+
+
     // }));
 
-    beforeEach(inject(function($injector) {
-
-      $rootScope = $injector.get('$rootScope');      
-      $scope = $rootScope.$new();
-      $state = $injector.get('$state');
-      $stateParams = $injector.get('$stateParams');
-      Page = $injector.get('Page');
-      Auth = $injector.get('Auth');
-      Notifications = $injector.get('Notifications');
-      ArbRest = $injector.get('ArbRest');
-      $controller = $injector.get('$controller');
-
-      $httpBackend = $injector.get('$httpBackend');
-      // var conf = $injector.get('conf');
-
-      // $httpBackend.when('GET',conf.getApiUrl() + '/scripts/common/app/layouts/default.tpl.html')
-      //   .respond(function (method, url, data) {
-      //     console.log('get do template');
-      //     return [200, ''];
-      //   });
-
-      // $state.transitionTo('article.create', {});
-
-      createController = function() {
-        $state.transitionTo('article', {});
-        //$rootScope.$apply();
-        return $controller('ArticleCtrl', {
-          $scope: $scope,
-          $rootScope: $rootScope,
-          $state: $state,
-          $stateParams: $stateParams,
-          Page: Page,
-          Auth: Auth,
-          Notifications: Notifications,
-          ArbRest: ArbRest
-        });
-        // .config(['$stateProvider', function ($stateProvider) {
-        //   $stateProvider
-        //     .state('article', {})
-        //     .state('article.create', {});
-        // }]);
-      };
-
-    }));
-
     describe('Method Save', function() {
+      iit('test', 
+        inject(function ($controller, _$httpBackend_, $rootScope, _ArbRest_, $state, conf) {
+          $httpBackend = _$httpBackend_;
+          var baseUrl = conf.getApiUrl();
+          $httpBackend.expectPOST( baseUrl + '/article')
+            .respond('[{"name":"tester"},{"name":"tester2"}]');
+          ArbRest = _ArbRest_;
+          $scope = $rootScope.$new();
+          ArticleCtrl = $controller('ArticleCtrl', {
+            $scope: $scope,
+            ArbRest: ArbRest
+          });
+
+          $state.transitionTo('article.create');
+
+          $scope.title = 'title of article';
+          $scope.contents = 'contents of article';
+
+          ArticleCtrl.create($state, $scope);
+          console.log($httpBackend)
+
+          $rootScope.$digest();
+          $httpBackend.flush();
+        })
+      );
+
+      it('should be able to save without problems', 
+        inject(function(_$httpBackend_, $state, $controller, $rootScope) {
+          var $httpBackend = _$httpBackend_;
+
+
+          $scope = $rootScope.$new();
+
+          ArticleCtrl = $controller('ArticleCtrl', {
+            $scope: $scope,
+          });
+
+          $state.transitionTo('article.create');
+
+          $scope.title = 'title of article';
+          $scope.contents = 'contents of article';
+
+          ArticleCtrl.create($state, $scope);
+          console.log($httpBackend)
+
+          $rootScope.$digest();
+          $httpBackend.flush();
+
+          //asset 
+        })
+      );
 
       it( 'should pass a dummy test ArticleCtrl', function() {
         ArticleCtrl.should.exist;
       });
 
-      iit('should be able to save without problems', function () {
-        $scope.title = 'title of article';
-        $scope.contents = 'contents of article';
-        ArticleCtrl = createController();
-        $state.transitionTo('article.create', {});
-        ArticleCtrl.create();
-        $httpBackend.flush();
-      });
 
       it('should be able to show an error when try to save without title', function(done) {
         article.title = '';

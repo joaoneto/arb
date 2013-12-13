@@ -1,7 +1,8 @@
 angular.module('arb', [
   'arb.constants',
   'arb.common',
-  'arb.modules'
+  'arb.modules',
+  'arb.templates.cache'
 ])
 
 .config(['$httpProvider', function ($httpProvider) {

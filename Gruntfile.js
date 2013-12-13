@@ -243,7 +243,18 @@ module.exports = function (grunt) {
           },
         }
       }
-    }
+    },
+
+    html2js: {
+      arb: {
+        options: {
+          base: '<%= config.src_path %>/'
+        },
+        src: ['<%= config.src_path %>/scripts/**/*.tpl.html'],
+        dest: '<%= config.src_path %>/scripts/templates.cache.js',
+        module: 'arb.templates.cache'
+      }
+    },
 
   });
 
@@ -272,6 +283,7 @@ module.exports = function (grunt) {
         'clean:require',
         'copy:require',
         'bower',
+        'html2js',
         'clean:require_map',
         'clean:ngconstant',
         'ngconstant:' + env,

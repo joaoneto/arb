@@ -40,6 +40,8 @@
     "grunt-require-map": "0.0.3",
     "grunt-contrib-requirejs": "~0.4.1",
     "grunt-angular-map": "0.0.1",
-    "grunt-ng-constant": "~0.4.5"
+    "grunt-ng-constant": "~0.4.5",
+    "grunt-html2js": "~0.2.3",
+    "karma-ng-scenario": "~0.1.0"
   }
 }
