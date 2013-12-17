@@ -69,8 +69,6 @@ angular.module('arb.common.resources.ArbRestMock', ['ngMockE2E'])
 
     $httpBackend.when('POST', baseUrl + '/article')
       .respond(function (method, url, data) {
-//        debugger;
-        console.log('POST do httpBackend ----------------------')
         var articles = JSON.parse(sessionStorage.get('articles')) || [];
         var parsedData = JSON.parse(data);
 
