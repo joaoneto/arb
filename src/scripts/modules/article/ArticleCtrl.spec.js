@@ -9,18 +9,19 @@ describe('<Unit Test>', function() {
 
     beforeEach(module('arb'));
 
-    // beforeEach(inject(function($injector) {
+    beforeEach(inject(function($injector) {
 
-    //   // $rootScope = $injector.get('$rootScope');      
-    //   // $scope = $rootScope.$new();
-    //   // $controller = $injector.get('$controller');
+      // _ArbRestMock_ = $injector.get('mock');      
+      // $scope = $rootScope.$new();
+      // $controller = $injector.get('$controller');
 
 
-    // }));
+    }));
 
     describe('Method Save', function() {
       iit('test', 
         inject(function ($controller, _$httpBackend_, $rootScope, _ArbRest_, $state, conf) {
+
           $httpBackend = _$httpBackend_;
           var baseUrl = conf.getApiUrl();
           $httpBackend.expectPOST( baseUrl + '/article')

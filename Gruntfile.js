@@ -191,7 +191,8 @@ module.exports = function (grunt) {
               '!app*.js',
               '!*.tpl.html',
               '!main.js',
-              '!*.spec.js'
+              '!*.spec.js',
+              '!*ArbRest*'
             ]
           }
         }
@@ -213,7 +214,7 @@ module.exports = function (grunt) {
           fileName: '<%= config.src_path %>/<%= config.require_map %>'
         },
         files: [{
-          src: ['base/src/scripts/**/*.js', '!base/src/scripts/app.js', '!base/src/scripts/**/*.spec.js', '!base/src/scripts/src.map.js'],
+          src: ['base/src/scripts/**/*.js', '!base/src/scripts/app.js', '!base/src/scripts/**/*.spec.js', '!base/src/scripts/src.map.js',],
           cwd: '.'
         }]
       }
