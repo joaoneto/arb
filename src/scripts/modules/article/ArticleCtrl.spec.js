@@ -8,16 +8,16 @@ describe('<Unit Test>', function() {
 
     beforeEach(inject(function ($controller, _$httpBackend_, $rootScope, $state, _ArbRest_, conf) {
 
-          var baseUrl = conf.getApiUrl();
-          $scope = $rootScope.$new();
-          ArticleCtrl = $controller('ArticleCtrl', {
-            $scope: $scope,
-            ArbRest: _ArbRest_
-          });
+      var baseUrl = conf.getApiUrl();
+      $scope = $rootScope.$new();
+      ArticleCtrl = $controller('ArticleCtrl', {
+        $scope: $scope,
+        ArbRest: _ArbRest_
+      });
 
-          _$httpBackend_.expectPOST( baseUrl + '/article').respond();
-          
-          $state.transitionTo('article.create');
+      _$httpBackend_.expectPOST( baseUrl + '/article').respond();
+      
+      $state.transitionTo('article');
 
     }));
 
@@ -31,6 +31,8 @@ describe('<Unit Test>', function() {
     describe('Method Save', function() {
       iit('test', 
         inject(function ($rootScope, $state, conf) {
+
+          $state.transitionTo('article.create');
 
           $scope.title = 'title of article';
           $scope.contents = 'contents of article';
