@@ -57,7 +57,7 @@ module.exports = function (config) {
     // - Opera
     // - Safari
     // - PhantomJS
-    browsers: ['Chrome'],
+    browsers: ['PhantomJS'],
 
     // Continuous Integration mode
     // if true, it capture browsers, run tests and exit
