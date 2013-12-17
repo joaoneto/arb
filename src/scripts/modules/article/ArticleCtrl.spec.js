@@ -2,47 +2,41 @@
 describe('<Unit Test>', function() {
   describe('Article:', function() {
 
-    // var ArticleCtrl,
-    //   $scope,
-    //   $rootScope,
-    //   $controller;
+    var $scope, ArticleCtrl;
 
     beforeEach(module('arb'));
 
-    beforeEach(inject(function($injector) {
+    beforeEach(inject(function ($controller, _$httpBackend_, $rootScope, $state, _ArbRest_, conf) {
 
-      // _ArbRestMock_ = $injector.get('mock');      
-      // $scope = $rootScope.$new();
-      // $controller = $injector.get('$controller');
+          var baseUrl = conf.getApiUrl();
+          $scope = $rootScope.$new();
+          ArticleCtrl = $controller('ArticleCtrl', {
+            $scope: $scope,
+            ArbRest: _ArbRest_
+          });
 
+          _$httpBackend_.expectPOST( baseUrl + '/article').respond();
+          
+          $state.transitionTo('article.create');
+
+    }));
+
+    afterEach(inject(function ($rootScope, _$httpBackend_) {
+
+      $rootScope.$digest();
+      _$httpBackend_.flush();
 
     }));
 
     describe('Method Save', function() {
       iit('test', 
-        inject(function ($controller, _$httpBackend_, $rootScope, _ArbRest_, $state, conf) {
-
-          $httpBackend = _$httpBackend_;
-          var baseUrl = conf.getApiUrl();
-          $httpBackend.expectPOST( baseUrl + '/article')
-            .respond('[{"name":"tester"},{"name":"tester2"}]');
-          ArbRest = _ArbRest_;
-          $scope = $rootScope.$new();
-          ArticleCtrl = $controller('ArticleCtrl', {
-            $scope: $scope,
-            ArbRest: ArbRest
-          });
-
-          $state.transitionTo('article.create');
+        inject(function ($rootScope, $state, conf) {
 
           $scope.title = 'title of article';
           $scope.contents = 'contents of article';
 
           ArticleCtrl.create($state, $scope);
-          console.log($httpBackend)
 
-          $rootScope.$digest();
-          $httpBackend.flush();
         })
       );
 
