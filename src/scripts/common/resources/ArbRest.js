@@ -7,7 +7,7 @@ angular.module('arb.common.resources.ArbRest', [
   function (RestangularProvider) {
     RestangularProvider.setResponseInterceptor(
       function (data, operation, what) {
-        console.log(data);
+        // console.log(data);
         return data;
     });  
   }

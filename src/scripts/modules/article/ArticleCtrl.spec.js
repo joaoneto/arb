@@ -1,100 +1,73 @@
 //The tests
-describe('<Unit Test>', function() {
-  describe('Article:', function() {
+describe('<Unit Test> ArticleCtrl', function() {
 
-    // var ArticleCtrl,
-    //   $scope,
-    //   $rootScope,
-    //   $controller;
+  beforeEach(module('arb'));
 
-    beforeEach(module('arb'));
+  describe('Internal methods', function() {
 
-    // beforeEach(inject(function($injector) {
+    var $scope, ArticleCtrl;
 
-    //   // $rootScope = $injector.get('$rootScope');      
-    //   // $scope = $rootScope.$new();
-    //   // $controller = $injector.get('$controller');
+    beforeEach(
+      inject(function ($controller, $rootScope, $state, ArbRest ) {
+        $scope = $rootScope.$new();
+        ArticleCtrl = $controller('ArticleCtrl', {
+          $scope: $scope,
+          ArbRest: ArbRest
+        });
+        
+        $state.transitionTo('article');
+      })
+    );
 
+    afterEach(
+      inject(function ($rootScope) {
+        $rootScope.$digest();
+      })
+    );
 
-    // }));
+    it( 'should pass a dummy test ArticleCtrl', function() {
+      ArticleCtrl.should.exist;
+    });
 
-    describe('Method Save', function() {
-      iit('test', 
-        inject(function ($controller, _$httpBackend_, $rootScope, _ArbRest_, $state, conf) {
-          $httpBackend = _$httpBackend_;
+    describe('Server Methods', function() {
+
+      beforeEach(
+        inject(function ($httpBackend, conf) {
           var baseUrl = conf.getApiUrl();
-          $httpBackend.expectPOST( baseUrl + '/article')
-            .respond('[{"name":"tester"},{"name":"tester2"}]');
-          ArbRest = _ArbRest_;
-          $scope = $rootScope.$new();
-          ArticleCtrl = $controller('ArticleCtrl', {
-            $scope: $scope,
-            ArbRest: ArbRest
-          });
+          $httpBackend.expectPOST( baseUrl + '/article').respond();
+        })
+      );
 
-          $state.transitionTo('article.create');
-
-          $scope.title = 'title of article';
-          $scope.contents = 'contents of article';
-
-          ArticleCtrl.create($state, $scope);
-          console.log($httpBackend)
-
-          $rootScope.$digest();
+      afterEach(
+        inject(function ($httpBackend) {
           $httpBackend.flush();
         })
       );
 
       it('should be able to save without problems', 
-        inject(function(_$httpBackend_, $state, $controller, $rootScope) {
-          var $httpBackend = _$httpBackend_;
-
-
-          $scope = $rootScope.$new();
-
-          ArticleCtrl = $controller('ArticleCtrl', {
-            $scope: $scope,
-          });
-
+        inject(function ($rootScope, $state, conf) {
           $state.transitionTo('article.create');
 
           $scope.title = 'title of article';
           $scope.contents = 'contents of article';
 
           ArticleCtrl.create($state, $scope);
-          console.log($httpBackend)
-
-          $rootScope.$digest();
-          $httpBackend.flush();
-
-          //asset 
         })
       );
 
-      it( 'should pass a dummy test ArticleCtrl', function() {
-        ArticleCtrl.should.exist;
-      });
+      it('should be able to show an error when try to save without title', 
+        inject(function ($rootScope, $state, conf) {
+          $state.transitionTo('article.create');
 
+          $scope.title = 'title of article';
+          $scope.contents = 'contents of article';
 
-      it('should be able to show an error when try to save without title', function(done) {
-        article.title = '';
+          ArticleCtrl.create($state, $scope);
+        })
+      );
 
-        return article.save(function(err) {
-          should.exist(err);
-          done();
-        });
-      });
     });
 
-    // afterEach(function(done) {
-    //   Article.remove({});
-    //   User.remove({});
-    //   done();
-    // });
-    // after(function(done){
-    //   Article.remove().exec();
-    //   User.remove().exec();
-    //   done();
-    // });
   });
+
 });

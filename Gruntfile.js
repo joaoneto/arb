@@ -150,27 +150,25 @@ module.exports = function (grunt) {
 
     ngconstant: {
       options: {
-        space: '  '
-      },
-      unit: [{
-        dest: '<%= config.src_path %>/config/constants.js',
         name: 'arb.constants',
+        dest: '<%= config.src_path %>/config/constants.js',
+        space: ' '
+      },
+      unit: {
         constants: {
           API_URL: 'http://localhost',
           API_PORT: '3000',
           API_VERSION: 'v1'
         }
-      }],
-      continuous: [{
-        dest: '<%= config.src_path %>/config/constants.js',
-        name:  'arb.constants',
+      },
+      continuous: {
         constants: {
           API_URL: process.env.API_URL,
           API_PORT: process.env.API_PORT,
           API_VERSION: 'v1',
           package: grunt.file.readJSON('package.json')
         }
-      }]
+      }
     },
 
     bower: {
@@ -191,7 +189,8 @@ module.exports = function (grunt) {
               '!app*.js',
               '!*.tpl.html',
               '!main.js',
-              '!*.spec.js'
+              '!*.spec.js',
+              '!*ArbRest*'
             ]
           }
         }
@@ -213,7 +212,7 @@ module.exports = function (grunt) {
           fileName: '<%= config.src_path %>/<%= config.require_map %>'
         },
         files: [{
-          src: ['base/src/scripts/**/*.js', '!base/src/scripts/app.js', '!base/src/scripts/**/*.spec.js', '!base/src/scripts/src.map.js'],
+          src: ['base/src/scripts/**/*.js', '!base/src/scripts/app.js', '!base/src/scripts/**/*.spec.js', '!base/src/scripts/src.map.js',],
           cwd: '.'
         }]
       }
