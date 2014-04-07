@@ -27,6 +27,7 @@
     "html5shiv": "~3.7.0",
     "jquery": "~2.0.3",
     "requirejs": "~2.1.8",
-    "restangular": "~1.1.8"
+    "restangular": "~1.1.8",
+    "lodash": "~2.4.1"
   }
 }
